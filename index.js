@@ -15,6 +15,22 @@ const types = {
   number: {
     name: 'number',
     checker: v => typeof v === 'number'
+  },
+  boolean: {
+    name: 'boolean',
+    checker: v => typeof v === 'boolean'
+  },
+  null: {
+    name: 'null',
+    checker: v => typeof v === null
+  },
+  undefined: {
+    name: 'undefined',
+    checker: v => typeof v === 'undefined'
+  },
+  date: {
+    name: 'date',
+    checker: v => v instanceof Date
   }
 };
 
@@ -137,7 +153,9 @@ store.describeStore({
   model: {
     name: types.string,
     lastName: types.string,
-    age: types.number
+    age: types.number,
+    dateOfBirth: types.date,
+    admin: types.boolean
   }
 });
 
@@ -147,7 +165,9 @@ store.describeStore({
   model: {
     title: types.string,
     content: types.string,
-    author: types.string
+    author: types.string,
+    publishDate: types.date,
+    published: types.boolean
   }
 });
 
@@ -171,7 +191,9 @@ store.dispatch({
   model: {
     name: 'Alex',
     lastName: 'Casillas',
-    age: 27
+    age: 27,
+    dateOfBirth: new Date('03-23-1990'),
+    admin: true
   }
 });
 
@@ -181,7 +203,8 @@ store.dispatch({
   model: {
     title: 'Brand new post',
     content: 'Creating a State Management library like a boss.',
-    author: 'Alex Casillas'
+    author: 'Alex Casillas',
+    published: false
   }
 });
 
@@ -194,7 +217,9 @@ const testInterval = setInterval(function() {
     model: {
       title: `Post - ${makeid()}`,
       content: 'Creating a State Management library like a boss.',
-      author: 'Alex Casillas'
+      author: 'Alex Casillas',
+      publishDate: new Date(),
+      published: Math.floor(Math.random() * 10) + 1 > 5 ? true : false
     }
   });
 }, 2000);
