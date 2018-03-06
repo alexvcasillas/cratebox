@@ -10,28 +10,28 @@ const makeid = require('./utils').makeid;
 const types = {
   string: {
     name: 'string',
-    checker: v => typeof v === 'string'
+    checker: v => typeof v === 'string',
   },
   number: {
     name: 'number',
-    checker: v => typeof v === 'number'
+    checker: v => typeof v === 'number',
   },
   boolean: {
     name: 'boolean',
-    checker: v => typeof v === 'boolean'
+    checker: v => typeof v === 'boolean',
   },
   null: {
     name: 'null',
-    checker: v => typeof v === null
+    checker: v => typeof v === null,
   },
   undefined: {
     name: 'undefined',
-    checker: v => typeof v === 'undefined'
+    checker: v => typeof v === 'undefined',
   },
   date: {
     name: 'date',
-    checker: v => v instanceof Date
-  }
+    checker: v => v instanceof Date,
+  },
 };
 
 /**
@@ -44,7 +44,7 @@ const types = {
  */
 const baseDescriptor = {
   _mutableProperties: false,
-  _isDispatched: true
+  _isDispatched: true,
 };
 
 /**
@@ -57,7 +57,7 @@ const baseDescriptor = {
  * complaining about mutating directly the properties.
  */
 const dispatchedModel = {
-  _isDispatched: true
+  _isDispatched: true,
 };
 
 /**
@@ -92,7 +92,7 @@ const store = {
   // Map that contains all of the store definitions
   descriptions: new Map(),
   // Map that contains all of the store changes based on the store definitions
-  state: new TypeMap(),
+  state: new Map(),
   // Map that contains all of the subscription listeners
   listeners: new Map(),
   /**
@@ -106,7 +106,7 @@ const store = {
       throw new Error(`You can't describe a new store with the same identifier as a previously described one.`);
     }
     // If not, then we will set a new description based on the identifier and the model
-    this.descriptions.set(storeModel.identifier, storeModel.model);
+    this.descriptions.set(storeModel.identifier, { ...storeModel.model });
   },
   /**
    * This method returns all of the store descriptions in the store.
@@ -131,8 +131,15 @@ const store = {
   /**
    * This method returns the current state of the whole store object.
    */
-  getState() {
+  getGlobalState() {
     return this.state;
+  },
+  /**
+   * This method returns the current state of an specified store
+   * @param {string} identifier
+   */
+  getState(identifier) {
+    return this.state.get(identifier)._data.slice(-1);
   },
   /**
    * This method dispatches a new store action to the store by
@@ -148,12 +155,30 @@ const store = {
       if (!descriptor[key].checker(model[key])) {
         // If it's not a valid type, then throw an error complaining about it :)
         throw new Error(
-          `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a "${descriptor[key].name}"`
+          `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a "${
+            descriptor[key].name
+          }"`,
         );
       }
     });
     // If all of the keys pass the type-checking then we proceed to set it into the store
-    this.state.set(identifier, { ...dispatchedModel, ...model });
+    const previousState = this.state.get(identifier); // Get the previous state of the store
+    let nextState; // Declare the next state where we will set the new state
+    // Check if we have a previous state
+    if (typeof previousState !== 'undefined') {
+      /**
+       * If so, then simply just set the nextState as a new array with a
+       * copy of the previous state data and adding to it the data model
+       */
+      nextState = [...previousState._data, model];
+    } else {
+      /**
+       * If we don't have a previous state, just set the nextState
+       * as a new array holding the new dispatched data model within it
+       */
+      nextState = [model];
+    }
+    this.state.set(identifier, { ...dispatchedModel, _data: nextState });
     // Check if we have a listener subscribing to this store
     if (this.listeners.has(identifier)) {
       // If we do, then we should call the listener :)
@@ -192,7 +217,7 @@ const store = {
     }
     // Add the listener to the store
     this.listeners.set(store, listener);
-  }
+  },
 };
 
 // Describe a new user store
@@ -203,8 +228,8 @@ store.describeStore({
     lastName: types.string,
     age: types.number,
     dateOfBirth: types.date,
-    admin: types.boolean
-  }
+    admin: types.boolean,
+  },
 });
 
 // Describe a new post store
@@ -215,21 +240,19 @@ store.describeStore({
     content: types.string,
     author: types.string,
     publishDate: types.date,
-    published: types.boolean
-  }
+    published: types.boolean,
+  },
 });
 
 // Subscribe to user store changes
 store.subscribe('user', model => {
-  console.log('User store changed !!');
-  console.log(model);
+  console.log('Store User Subscription: ', model);
   console.log('----');
 });
 
 // Subscribe to post store changes
 store.subscribe('post', model => {
-  console.log('Post store changed !!');
-  console.log(model);
+  console.log('Store Post Subscription: ', model);
   console.log('----');
 });
 
@@ -241,8 +264,19 @@ store.dispatch({
     lastName: 'Casillas',
     age: 27,
     dateOfBirth: new Date('03-23-1990'),
-    admin: true
-  }
+    admin: true,
+  },
+});
+// Dispatch a new action to the user store
+store.dispatch({
+  identifier: 'user',
+  model: {
+    name: 'Antonio',
+    lastName: 'Cobos',
+    age: 27,
+    dateOfBirth: new Date('03-23-1990'),
+    admin: true,
+  },
 });
 
 // Dispatch a new action to the post store
@@ -252,27 +286,33 @@ store.dispatch({
     title: 'Brand new post',
     content: 'Creating a State Management library like a boss.',
     author: 'Alex Casillas',
-    published: false
-  }
+    published: false,
+  },
 });
 
-console.log('Initializing test interval !!');
-const testInterval = setInterval(function() {
-  console.log('Dispatching a new action to post store');
-  // Dispatch a new action to the post store
-  store.dispatch({
-    identifier: 'post',
-    model: {
-      title: `Post - ${makeid()}`,
-      content: 'Creating a State Management library like a boss.',
-      author: 'Alex Casillas',
-      publishDate: new Date(),
-      published: Math.floor(Math.random() * 10) + 1 > 5 ? true : false
-    }
-  });
-}, 2000);
+// Display the global state of the store
+console.log('Global State: ', store.getGlobalState());
 
-setTimeout(function() {
-  console.log('Clearing test interval !!');
-  clearInterval(testInterval);
-}, 10000);
+// console.log('Descriptors');
+// console.log(store.descriptions);
+
+// console.log('Initializing test interval !!');
+// const testInterval = setInterval(function() {
+//   console.log('Dispatching a new action to post store');
+//   // Dispatch a new action to the post store
+//   store.dispatch({
+//     identifier: 'post',
+//     model: {
+//       title: `Post - ${makeid()}`,
+//       content: 'Creating a State Management library like a boss.',
+//       author: 'Alex Casillas',
+//       publishDate: new Date(),
+//       published: Math.floor(Math.random() * 10) + 1 > 5 ? true : false,
+//     },
+//   });
+// }, 2000);
+
+// setTimeout(function() {
+//   console.log('Clearing test interval !!');
+//   clearInterval(testInterval);
+// }, 10000);
