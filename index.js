@@ -99,6 +99,12 @@ const store = {
       console.warn('A store has changed but it has no listener attached to it.');
     }
   },
+  /**
+   * This method adds a subscription to a store making it reactive to changes
+   * triggered by the store's dispatch method.
+   * @param {string} store
+   * @param {function} listener
+   */
   subscribe(store, listener) {
     // Check if we have a defined store to attached the listener to
     if (typeof store === 'undefined') {
