@@ -1,3 +1,5 @@
+const makeid = require('./utils').makeid;
+
 /**
  * Type System
  * Type System consists on objects that store will check against.
@@ -27,6 +29,8 @@ const store = {
   descriptions: new Map(),
   // Map that contains all of the store changes based on the store definitions
   state: new Map(),
+  // Map that contains all of the subscription listeners
+  listeners: new Map(),
   /**
    * This method describes a store based on a store model object.
    * @param {object} storeModel
@@ -86,10 +90,42 @@ const store = {
     });
     // If all of the keys pass the type-checking then we proceed to set it into the store
     this.state.set(identifier, model);
+    // Check if we have a listener subscribing to this store
+    if (this.listeners.has(identifier)) {
+      // If we do, then we should call the listener :)
+      this.listeners.get(identifier)(model);
+    } else {
+      // If not, we warn the user that the store has changed but there's no listener attached to it
+      console.warn('A store has changed but it has no listener attached to it.');
+    }
+  },
+  subscribe(store, listener) {
+    // Check if we have a defined store to attached the listener to
+    if (typeof store === 'undefined') {
+      // If we don't, then throw an error complaining about it :)
+      throw new Error(`The subscription method needs a store to subscribe to`);
+    }
+    // Check if we have a defined function for the listener callback
+    if (typeof listener !== 'function') {
+      // If we don't, then throw an error complaining about it :)
+      throw new Error(`Subscribe listener is expected to be a function.`);
+    }
+    // Check if we're trying to set a listener for a non-existent store
+    if (!this.descriptions.has(store)) {
+      // If we do, then throw an error complaining about it :)
+      throw new Error(`You're tyring to subscribe changes for a non-existent store.`);
+    }
+    // Check if we already have a listener defined for this store
+    if (this.listeners.has(store)) {
+      // If we do, then throw an error complaining about it :)
+      throw new Error(`You're trying to set a listener to a store that already has a listener attached to it.`);
+    }
+    // Add the listener to the store
+    this.listeners.set(store, listener);
   }
 };
 
-// Describe a new store
+// Describe a new user store
 store.describeStore({
   identifier: 'user',
   model: {
@@ -99,10 +135,31 @@ store.describeStore({
   }
 });
 
-console.log('Store state');
-console.log(store.getState());
-console.log('----');
-// Dispatch a new action the the user store
+// Describe a new post store
+store.describeStore({
+  identifier: 'post',
+  model: {
+    title: types.string,
+    content: types.string,
+    author: types.string
+  }
+});
+
+// Subscribe to user store changes
+store.subscribe('user', model => {
+  console.log('User store changed !!');
+  console.log(model);
+  console.log('----');
+});
+
+// Subscribe to post store changes
+store.subscribe('post', model => {
+  console.log('Post store changed !!');
+  console.log(model);
+  console.log('----');
+});
+
+// Dispatch a new action to the user store
 store.dispatch({
   identifier: 'user',
   model: {
@@ -111,8 +168,32 @@ store.dispatch({
     age: 27
   }
 });
-console.log('Store descriptions');
-console.log(store.getStoreDescriptions());
-console.log('----');
-console.log('Store state');
-console.log(store.getState());
+
+// Dispatch a new action to the post store
+store.dispatch({
+  identifier: 'post',
+  model: {
+    title: 'Brand new post',
+    content: 'Creating a State Management library like a boss.',
+    author: 'Alex Casillas'
+  }
+});
+
+console.log('Initializing test interval !!');
+const testInterval = setInterval(function() {
+  console.log('Dispatching a new action to post store');
+  // Dispatch a new action to the post store
+  store.dispatch({
+    identifier: 'post',
+    model: {
+      title: `Post - ${makeid()}`,
+      content: 'Creating a State Management library like a boss.',
+      author: 'Alex Casillas'
+    }
+  });
+}, 2000);
+
+setTimeout(function() {
+  console.log('Clearing test interval !!');
+  clearInterval(testInterval);
+}, 10000);
