@@ -35,6 +35,54 @@ const types = {
 };
 
 /**
+ * Base Descriptor Object
+ * This is the base descriptor object where all of the
+ * store descriptions inherit from.
+ * All of this properties are considered privates and therefore
+ * should not be accesed from outside of the intented scope or
+ * it may blow up the library :)
+ */
+const baseDescriptor = {
+  _mutableProperties: false,
+  _isDispatched: true
+};
+
+/**
+ * Dispatched Model Object
+ * This is the base object for a state change dispatched
+ * via store's dispatch method.
+ * If we're trying to change a property directly instead
+ * of using store's dispatch method, it won't have the
+ * _isDispatched property so we should throw an error
+ * complaining about mutating directly the properties.
+ */
+const dispatchedModel = {
+  _isDispatched: true
+};
+
+/**
+ * TypeMap Object
+ * The TypeMap Object is a small override of the
+ * default Map.set() functionality.
+ * With this small override we ensure that Map.set()
+ * is always called within a store's dispatch method.
+ */
+const TypeMap = function() {
+  // Declare the custom map
+  const typeMap = new Map();
+  // Extend the set functionality
+  typeMap.set = function(...args) {
+    // Check if this was a store dispatched action
+    if (!args[1]._isDispatched) {
+      // If it wasn't, then throw an error complaining about it :)
+      throw new Error(`Direct state manipulation is not allowed. Use the store's dispatch method instead.`);
+    }
+  };
+  // Return the new TypeMap Object :)
+  return typeMap;
+};
+
+/**
  * Store System
  * Store System consists on an object that will be in charge of
  * describing the stores within it, dispatching store changes and
@@ -44,7 +92,7 @@ const store = {
   // Map that contains all of the store definitions
   descriptions: new Map(),
   // Map that contains all of the store changes based on the store definitions
-  state: new Map(),
+  state: new TypeMap(),
   // Map that contains all of the subscription listeners
   listeners: new Map(),
   /**
@@ -105,7 +153,7 @@ const store = {
       }
     });
     // If all of the keys pass the type-checking then we proceed to set it into the store
-    this.state.set(identifier, model);
+    this.state.set(identifier, { ...dispatchedModel, ...model });
     // Check if we have a listener subscribing to this store
     if (this.listeners.has(identifier)) {
       // If we do, then we should call the listener :)
