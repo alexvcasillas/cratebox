@@ -1,0 +1,12 @@
+{
+  "name": "typestore",
+  "version": "0.0.1",
+  "description": "My own implementation of a state management library",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
