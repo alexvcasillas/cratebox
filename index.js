@@ -293,26 +293,23 @@ store.dispatch({
 // Display the global state of the store
 console.log('Global State: ', store.getGlobalState());
 
-// console.log('Descriptors');
-// console.log(store.descriptions);
+console.log('Initializing test interval !!');
+const testInterval = setInterval(function() {
+  console.log('Dispatching a new action to post store');
+  // Dispatch a new action to the post store
+  store.dispatch({
+    identifier: 'post',
+    model: {
+      title: `Post - ${makeid()}`,
+      content: 'Creating a State Management library like a boss.',
+      author: 'Alex Casillas',
+      publishDate: new Date(),
+      published: Math.floor(Math.random() * 10) + 1 > 5 ? true : false,
+    },
+  });
+}, 2000);
 
-// console.log('Initializing test interval !!');
-// const testInterval = setInterval(function() {
-//   console.log('Dispatching a new action to post store');
-//   // Dispatch a new action to the post store
-//   store.dispatch({
-//     identifier: 'post',
-//     model: {
-//       title: `Post - ${makeid()}`,
-//       content: 'Creating a State Management library like a boss.',
-//       author: 'Alex Casillas',
-//       publishDate: new Date(),
-//       published: Math.floor(Math.random() * 10) + 1 > 5 ? true : false,
-//     },
-//   });
-// }, 2000);
-
-// setTimeout(function() {
-//   console.log('Clearing test interval !!');
-//   clearInterval(testInterval);
-// }, 10000);
+setTimeout(function() {
+  console.log('Clearing test interval !!');
+  clearInterval(testInterval);
+}, 10000);
