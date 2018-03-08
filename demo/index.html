@@ -10,9 +10,56 @@
 
 <body>
 
+  <div id="user-details">
+    <div class="user-name"></div>
+    <div class="user-lastName"></div>
+  </div>
+
   <script src="./store.umd.js"></script>
   <script>
-    console.log(store);
+    // Split store object into separate variables :)
+    const typeStore = store.store;
+    const types = store.types;
+
+    // DOM Objects
+    let userNameElement = document.querySelector('.user-name');
+    let userLastNameElement = document.querySelector('.user-lastName');
+
+    // Store Descriptions
+    typeStore.describeStore({
+      identifier: 'user',
+      model: {
+        name: types.string,
+        lastName: types.string,
+        age: types.number
+      }
+    });
+
+    typeStore.subscribe('user', model => {
+      userNameElement.textContent = model.name;
+      userLastNameElement.textContent = model.lastName;
+    });
+
+    typeStore.dispatch({
+      identifier: 'user',
+      model: {
+        name: 'Alex',
+        lastName: 'Casillas',
+        age: 28
+      }
+    })
+
+    setTimeout(() => {
+      typeStore.dispatch({
+        identifier: 'user',
+        model: {
+          name: 'Antonio',
+          lastName: 'Cobos',
+          age: 32
+        }
+      })
+    }, 2000);
+
   </script>
 </body>
 

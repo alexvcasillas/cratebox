@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node core/index.js",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "demo": "npx simplehttpserver ./demo"
   },
   "devDependencies": {
     "rollup": "^0.56.5",
@@ -16,6 +17,6 @@
     "rollup-plugin-uglify": "^3.0.0"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "Alex Casillas <alexvcasillas@gmail.com>",
+  "license": "MIT"
 }
