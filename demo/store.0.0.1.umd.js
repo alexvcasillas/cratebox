@@ -133,25 +133,32 @@ const store = {
     // If all of the keys pass the type-checking then we proceed to set it into the store
     const previousState = this.state.get(identifier); // Get the previous state of the store
     let nextState; // Declare the next state where we will set the new state
+    let nextStateObject; // Declare the next state object that will be set in the new state 
     // Check if we have a previous state
     if (typeof previousState !== 'undefined') {
       /**
        * If so, then simply just set the nextState as a new array with a
        * copy of the previous state data and adding to it the data model
+       * nextStateObject is a merge of the previous state object and the
+       * new model data, so we respect the properties that where missing
+       * from a new state change.
        */
-      nextState = [...previousState._data, model];
+      nextStateObject = Object.assign({}, previousState._data.slice(-1)[0], model);
+      nextState = [...previousState._data, nextStateObject];
     } else {
       /**
        * If we don't have a previous state, just set the nextState
        * as a new array holding the new dispatched data model within it
        */
       nextState = [model];
+      // If it's our first state, we should return the nextStateObject as the received model
+      nextStateObject = model;
     }
     this.state.set(identifier, { ...dispatchedModel, _data: nextState });
     // Check if we have a listener subscribing to this store
     if (this.listeners.has(identifier)) {
       // If we do, then we should call the listener :)
-      this.listeners.get(identifier)(model);
+      this.listeners.get(identifier)(nextStateObject);
     } else {
       // If not, we warn the user that the store has changed but there's no listener attached to it
       console.warn('A store has changed but it has no listener attached to it.');

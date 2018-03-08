@@ -8,7 +8,7 @@ export default [
     input: 'core/index.js',
     output: {
       name: 'store',
-      file: 'dist/store.umd.js',
+      file: `dist/store.${pkg.version}.umd.js`,
       format: 'umd',
     },
     plugins: [
@@ -25,6 +25,6 @@ export default [
   {
     input: 'core/index.js',
     external: ['ms'],
-    output: [{ file: 'dist/store.cjs.js', format: 'cjs' }, { file: 'dist/store.esm.js', format: 'es' }],
+    output: [{ file: `dist/store.${pkg.version}.cjs.js`, format: 'cjs' }, { file: `dist/store.${pkg.version}.esm.js`, format: 'es' }],
   },
 ];
