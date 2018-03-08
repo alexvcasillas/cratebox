@@ -6,13 +6,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>TypeStore Demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/preflight.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/utilities.min.css" rel="stylesheet">
+  <style>
+    #heading {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+  </style>
 </head>
 
-<body>
+<body class="font-sans bg-grey-lightest">
 
-  <div id="user-details">
-    <div class="user-name"></div>
-    <div class="user-lastName"></div>
+  <div id="heading" class="text-center">
+    <h1 class="text-4xl font-light mb-2">TypeStore</h1>
+    <h2 class="text-xl font-light">State Management Library</h2>
+  </div>
+
+  <div class="container mt-8 mx-auto">
+
+    <div class="bg-white mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
+      <div class="sm:flex sm:items-center px-6 py-4">
+        <img id="user-avatar" class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src=""
+          alt="">
+        <div class="text-center sm:text-left sm:flex-grow">
+          <div class="mb-4">
+            <p id="user-fullName" class="text-xl leading-tight"></p>
+            <p id="user-position" class="text-sm leading-tight text-grey-dark"></p>
+          </div>
+          <div>
+            <a id="user-hire" href="" target="_blank" class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple no-underline hover:bg-purple hover:text-white">Hire me!</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center text-sm mt-4 text-grey">Note: Wait for 5 seconds so a new store action gets dispatched</div>
+
   </div>
 
   <script src="./store.umd.js"></script>
@@ -22,8 +55,10 @@
     const types = store.types;
 
     // DOM Objects
-    let userNameElement = document.querySelector('.user-name');
-    let userLastNameElement = document.querySelector('.user-lastName');
+    let userAvatarElement = document.getElementById('user-avatar');
+    let userFullNameElement = document.getElementById('user-fullName');
+    let userPositionElement = document.getElementById('user-position');
+    let userHireElement = document.getElementById('user-hire');
 
     // Store Descriptions
     typeStore.describeStore({
@@ -31,13 +66,17 @@
       model: {
         name: types.string,
         lastName: types.string,
-        age: types.number
+        avatar: types.string,
+        position: types.string,
+        github: types.string,
       }
     });
 
     typeStore.subscribe('user', model => {
-      userNameElement.textContent = model.name;
-      userLastNameElement.textContent = model.lastName;
+      userAvatarElement.src = model.avatar;
+      userFullNameElement.textContent = model.name + " " + model.lastName;
+      userPositionElement.textContent = model.position;
+      userHireElement.setAttribute('href', model.github);
     });
 
     typeStore.dispatch({
@@ -45,7 +84,9 @@
       model: {
         name: 'Alex',
         lastName: 'Casillas',
-        age: 28
+        avatar: 'https://avatars3.githubusercontent.com/u/9496960?s=460&v=4',
+        position: 'Frontend Engineer',
+        github: 'https://github.com/alexvcasillas'
       }
     })
 
@@ -55,10 +96,12 @@
         model: {
           name: 'Antonio',
           lastName: 'Cobos',
-          age: 32
+          avatar: 'https://avatars3.githubusercontent.com/u/19750719?s=460&v=4',
+          position: 'Backend Engineer',
+          github: 'https://github.com/acaeronte1'
         }
       })
-    }, 2000);
+    }, 5000);
 
   </script>
 </body>
