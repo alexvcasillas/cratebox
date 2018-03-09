@@ -37,13 +37,27 @@
             <p id="user-position" class="text-sm leading-tight text-grey-dark"></p>
           </div>
           <div>
-            <a id="user-hire" href="" target="_blank" class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple no-underline hover:bg-purple hover:text-white">Hire me!</a>
+            <a id="user-hire" href="" target="_blank" class="text-xs font-semibold rounded-full px-4 py-1 uppercase leading-normal bg-white border border-blue text-blue no-underline hover:bg-blue hover:text-white">Hire me !</a>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="text-center text-sm mt-4 text-grey">Note: Wait for 5 seconds so a new store action gets dispatched</div>
+    <div class="text-center text-sm mt-4 text-grey">Note: Wait for 5 seconds so a new store action gets dispatched.</div>
+
+    <div class="text-center mt-8">
+      <button id="travel-backwards" class="bg-blue hover:bg-blue-dark text-white py-2 px-4 rounded">
+        Travel Backwards
+      </button>
+      <button id="travel-forwards" class="bg-blue hover:bg-blue-dark text-white py-2 px-4 rounded ml-2">
+        Travel Forwards
+      </button>
+    </div>
+
+    <div class="text-center text-sm mt-4 text-grey">
+      Note: Open the console to see a warning when you
+      <br>try to time-travel beyond the limits of your store.
+    </div>
 
   </div>
 
@@ -58,6 +72,8 @@
     let userFullNameElement = document.getElementById('user-fullName');
     let userPositionElement = document.getElementById('user-position');
     let userHireElement = document.getElementById('user-hire');
+    let travelBackwards = document.getElementById('travel-backwards');
+    let travelForwards = document.getElementById('travel-forwards');
 
     // Store Descriptions
     typeStore.describeStore({
@@ -101,6 +117,17 @@
         }
       })
     }, 5000);
+
+    // DOM Event Listeners
+    travelBackwards.addEventListener('click', (e) => {
+      console.log(`Let's travel backwards in time !!`);
+      typeStore.travelBackwards('user');
+    });
+
+    travelForwards.addEventListener('click', (e) => {
+      console.log(`Let's travel forwards in time !!`);
+      typeStore.travelForwards('user');
+    });
 
   </script>
 </body>
