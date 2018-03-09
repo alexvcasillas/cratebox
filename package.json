@@ -1,12 +1,13 @@
 {
   "name": "typestore",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "My own implementation of a state management library",
   "main": "index.js",
   "scripts": {
     "start": "node core/index.js",
     "build": "rollup -c",
-    "demo": "npx simplehttpserver ./demo"
+    "demo": "yarn build && yarn cp-dist-demo && npx simplehttpserver ./demo",
+    "cp-dist-demo": "cpy dist/*.umd.js demo"
   },
   "devDependencies": {
     "rollup": "^0.56.5",
@@ -14,9 +15,11 @@
     "rollup-plugin-filesize": "^1.5.0",
     "rollup-plugin-node-resolve": "^3.2.0",
     "rollup-plugin-replace": "^2.0.0",
-    "rollup-plugin-uglify": "^3.0.0"
+    "rollup-plugin-uglify": "^3.0.0",
+    "cpy-cli": "^1.0.1"
   },
   "keywords": [],
   "author": "Alex Casillas <alexvcasillas@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {}
 }

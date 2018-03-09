@@ -8,28 +8,28 @@
 const types = {
   string: {
     name: 'string',
-    checker: v => typeof v === 'string',
+    checker: v => typeof v === 'string'
   },
   number: {
     name: 'number',
-    checker: v => typeof v === 'number',
+    checker: v => typeof v === 'number'
   },
   boolean: {
     name: 'boolean',
-    checker: v => typeof v === 'boolean',
+    checker: v => typeof v === 'boolean'
   },
   null: {
     name: 'null',
-    checker: v => typeof v === null,
+    checker: v => typeof v === null
   },
   undefined: {
     name: 'undefined',
-    checker: v => typeof v === 'undefined',
+    checker: v => typeof v === 'undefined'
   },
   date: {
     name: 'date',
-    checker: v => v instanceof Date,
-  },
+    checker: v => v instanceof Date
+  }
 };
 
 /**
@@ -42,7 +42,7 @@ const types = {
  */
 const baseDescriptor = {
   _mutableProperties: false,
-  _isDispatched: true,
+  _isDispatched: true
 };
 
 /**
@@ -55,7 +55,7 @@ const baseDescriptor = {
  * complaining about mutating directly the properties.
  */
 const dispatchedModel = {
-  _isDispatched: true,
+  _isDispatched: true
 };
 
 /**
@@ -137,7 +137,8 @@ const store = {
    * @param {string} identifier
    */
   getState(identifier) {
-    return this.state.get(identifier)._data.slice(-1);
+    const currentState = this.state.get(identifier).currentState;
+    return this.state.get(identifier)._data.slice(currentState, currentState + 1)[0];
   },
   /**
    * This method dispatches a new store action to the store by
@@ -153,16 +154,14 @@ const store = {
       if (!descriptor[key].checker(model[key])) {
         // If it's not a valid type, then throw an error complaining about it :)
         throw new Error(
-          `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a "${
-            descriptor[key].name
-          }"`,
+          `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a "${descriptor[key].name}"`
         );
       }
     });
     // If all of the keys pass the type-checking then we proceed to set it into the store
     const previousState = this.state.get(identifier); // Get the previous state of the store
     let nextState; // Declare the next state where we will set the new state
-    let nextStateObject; // Declare the next state object that will be set in the new state 
+    let nextStateObject; // Declare the next state object that will be set in the new state
     // Check if we have a previous state
     if (typeof previousState !== 'undefined') {
       /**
@@ -183,7 +182,8 @@ const store = {
       // If it's our first state, we should return the nextStateObject as the received model
       nextStateObject = model;
     }
-    this.state.set(identifier, { ...dispatchedModel, _data: nextState });
+    const currentState = nextState.length - 1; // Declare the current state index of the store to time travel
+    this.state.set(identifier, { ...dispatchedModel, currentState: currentState, _data: nextState });
     // Check if we have a listener subscribing to this store
     if (this.listeners.has(identifier)) {
       // If we do, then we should call the listener :)
@@ -193,6 +193,56 @@ const store = {
       console.warn('A store has changed but it has no listener attached to it.');
     }
   },
+  /**
+   * This method makes a store time travel forwards
+   * by the given identifier.
+   * @param {string} identifier
+   */
+  travelForwards(identifier) {
+    // Get the state
+    const state = this.state.get(identifier);
+    // Obtain the nextStateIndex that is the current state + 1
+    const nextStateIndex = state.currentState + 1;
+    // Check if we have and index out of bounds :)
+    if (nextStateIndex >= state._data.length) {
+      // If we do, we warn the user that the store has nothing more beyond this state
+      console.warn(`You can't keep traveling forwards within this store`);
+    } else {
+      // Set the Current State to the next state index
+      this.state.set(identifier, { ...state, currentState: nextStateIndex });
+      // Then call the subscribed listener of the store with the current state :)
+      this.listeners.get(identifier)(this.getState(identifier));
+    }
+  },
+  /**
+   * This method makes a store time travel backwards
+   * by the given identifier.
+   * @param {string} identifier
+   */
+  travelBackwards(identifier) {
+    // Get the state
+    const state = this.state.get(identifier);
+    // Obtain the nextStateIndex that is the current state - 1
+    const previousStateIndex = state.currentState - 1;
+    // Check if we have and index out of bounds :)
+    if (previousStateIndex < 0) {
+      // If we do, we warn the user that the store has nothing more beyond this state
+      console.warn(`You can't keep traveling backwards within this store`);
+    } else {
+      // Set the Current State to the next state index
+      this.state.set(identifier, { ...state, currentState: previousStateIndex });
+      // Then call the subscribed listener of the store with the current state :)
+      this.listeners.get(identifier)(this.getState(identifier));
+    }
+  },
+  /**
+   * This method makes a store time travel to
+   * a certain state based on the given index and by
+   * the given identifier.
+   * @param {string} identifier
+   * @param {number} index
+   */
+  travelTo(identifier, index) {},
   /**
    * This method adds a subscription to a store making it reactive to changes
    * triggered by the store's dispatch method.
@@ -222,7 +272,7 @@ const store = {
     }
     // Add the listener to the store
     this.listeners.set(store, listener);
-  },
+  }
 };
 
 export { types, store };
