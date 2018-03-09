@@ -1,5 +1,7 @@
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
+import filesize from 'rollup-plugin-filesize';
+import uglify from 'rollup-plugin-uglify';
 import pkg from './package.json';
 
 export default [
@@ -9,12 +11,14 @@ export default [
     output: {
       name: 'store',
       file: `dist/store.${pkg.version}.umd.js`,
-      format: 'umd',
+      format: 'umd'
     },
     plugins: [
-      resolve(), // so Rollup can find `ms`
-      commonjs(), // so Rollup can convert `ms` to an ES module
-    ],
+      resolve(), // so Rollup can find `store`
+      commonjs(), // so Rollup can convert `store` to an ES module
+      uglify(),
+      filesize()
+    ]
   },
   // CommonJS (for Node) and ES module (for bundlers) build.
   // (We could have three entries in the configuration array
@@ -25,6 +29,10 @@ export default [
   {
     input: 'core/index.js',
     external: ['ms'],
-    output: [{ file: `dist/store.${pkg.version}.cjs.js`, format: 'cjs' }, { file: `dist/store.${pkg.version}.esm.js`, format: 'es' }],
-  },
+    output: [
+      { file: `dist/store.${pkg.version}.cjs.js`, format: 'cjs' },
+      { file: `dist/store.${pkg.version}.esm.js`, format: 'es' }
+    ],
+    plugins: [uglify(), filesize()]
+  }
 ];
