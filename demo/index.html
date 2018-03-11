@@ -7,16 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>TypeStore Demo</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/preflight.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/utilities.min.css" rel="stylesheet">
-  <style>
-    #heading {
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-    }
-  </style>
 </head>
 
 <body class="font-sans bg-grey-lightest">
@@ -28,37 +20,104 @@
 
   <div class="container mt-8 mx-auto">
 
-    <div class="bg-white mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
-      <div class="sm:flex sm:items-center px-6 py-4">
-        <img id="user-avatar" class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="" alt="">
-        <div class="text-center sm:text-left sm:flex-grow">
-          <div class="mb-4">
-            <p id="user-fullName" class="text-xl leading-tight"></p>
-            <p id="user-position" class="text-sm leading-tight text-grey-dark"></p>
+    <div class="flex">
+      <div class="flex-1">
+        <div class="bg-white mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
+          <div class="sm:flex sm:items-center px-6 py-4">
+            <img id="user-avatar" class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="" alt="">
+            <div class="text-center sm:text-left sm:flex-grow">
+              <div class="mb-4">
+                <p id="user-fullName" class="text-xl leading-tight"></p>
+                <p id="user-position" class="text-sm leading-tight text-grey-dark"></p>
+              </div>
+              <div>
+                <a id="user-hire" href="" target="_blank" class="text-xs font-semibold rounded-full px-4 py-1 uppercase leading-normal bg-white border border-blue text-blue no-underline hover:bg-blue hover:text-white">Hire me !</a>
+              </div>
+            </div>
           </div>
-          <div>
-            <a id="user-hire" href="" target="_blank" class="text-xs font-semibold rounded-full px-4 py-1 uppercase leading-normal bg-white border border-blue text-blue no-underline hover:bg-blue hover:text-white">Hire me !</a>
-          </div>
+        </div>
+
+        <div class="text-center text-sm mt-4 text-grey">Note: Wait for 5 seconds so a new store action gets dispatched.</div>
+
+        <div class="text-center mt-8">
+          <button id="travel-backwards" class="bg-blue hover:bg-blue-dark text-white py-2 px-4 rounded">
+            Travel Backwards
+          </button>
+          <button id="travel-forwards" class="bg-blue hover:bg-blue-dark text-white py-2 px-4 rounded ml-2">
+            Travel Forwards
+          </button>
+        </div>
+
+        <div class="text-center text-sm mt-4 text-grey">
+          Note: Open the console to see a warning when you
+          <br>try to time-travel beyond the limits of your store.
+        </div>
+      </div>
+      <div class="flex-1 text-left">
+        <code id="state-display" class="text-grey-darker font-mono font-light"></code>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white">
+    <div class="container text-grey-darker mt-8 mx-auto text-center p-8">
+      <div class="mb-8">
+        <h2 class="text-2xl font-light mb-1 text-grey-darkest">About TypeStore</h2>
+        <h3 class="text-base font-light">Why is so great?</h3>
+      </div>
+      <div class="flex">
+        <div class="flex-1">
+          <h2 class="text-xl font-light mb-1 text-grey-darkest">Fast</h2>
+          <p>
+            It works fast, I'm not sure if it's: the fastest State Management Library alive but ...
+            <br> Seems fast enough to me.
+          </p>
+        </div>
+        <div class="flex-1">
+          <h2 class="text-xl font-light mb-1 text-grey-darkest">Small</h2>
+          <p>
+            <strong class="font-medium">Bundle size:</strong> 2.42 KB
+            <br>
+            <strong class="font-medium">Gzipped size:</strong>
+            <span class="text-green-light">936 B</span>
+            <br> Not bad, uh?
+          </p>
+        </div>
+        <div class="flex-1">
+          <h2 class="text-xl font-light mb-1 text-grey-darkest">Declarative</h2>
+          <p>
+            Just declare things, it's easy c'mon.
+          </p>
+        </div>
+      </div>
+      <div class="flex mt-8">
+        <div class="flex-1">
+          <h2 class="text-xl font-light mb-1 text-grey-darkest">Opinionated</h2>
+          <p>
+            Yes, that's true.
+            <br> It's opinionated. Deal with it.
+          </p>
+        </div>
+        <div class="flex-1">
+          <h2 class="text-xl font-light mb-1 text-grey-darkest">Open Source</h2>
+          <p>
+            Obvious.
+          </p>
+        </div>
+        <div class="flex-1">
+          <h2 class="text-xl font-light mb-1 text-grey-darkest">Cool</h2>
+          <p>
+            My mom says it is, so it must be true.
+          </p>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="text-center text-sm mt-4 text-grey">Note: Wait for 5 seconds so a new store action gets dispatched.</div>
-
-    <div class="text-center mt-8">
-      <button id="travel-backwards" class="bg-blue hover:bg-blue-dark text-white py-2 px-4 rounded">
-        Travel Backwards
-      </button>
-      <button id="travel-forwards" class="bg-blue hover:bg-blue-dark text-white py-2 px-4 rounded ml-2">
-        Travel Forwards
-      </button>
-    </div>
-
-    <div class="text-center text-sm mt-4 text-grey">
-      Note: Open the console to see a warning when you
-      <br>try to time-travel beyond the limits of your store.
-    </div>
-
+  <div class="container mt-8 mb-8 mx-auto text-center text-grey-darkest">
+    Crafted with
+    <span class="text-2xl text-red">&#9829;</span> by
+    <a class="no-underline text-blue-light hover:text-blue-dark" href="https://alexvcasillas.com">Alex Casillas</a>
   </div>
 
   <script src="./store.0.0.2.umd.js"></script>
@@ -74,6 +133,7 @@
     let userHireElement = document.getElementById('user-hire');
     let travelBackwards = document.getElementById('travel-backwards');
     let travelForwards = document.getElementById('travel-forwards');
+    let stateDisplay = document.getElementById('state-display');
 
     // Store Descriptions
     typeStore.describeStore({
@@ -92,6 +152,7 @@
       userFullNameElement.textContent = model.name + " " + model.lastName;
       userPositionElement.textContent = model.position;
       userHireElement.setAttribute('href', model.github);
+      stateDisplay.innerText = JSON.stringify(typeStore.getState('user'), null, 2);
     });
 
     typeStore.dispatch({

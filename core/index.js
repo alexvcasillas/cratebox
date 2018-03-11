@@ -1,36 +1,4 @@
-/**
- * Type System
- * Type System consists on objects that store will check against.
- * The object definition has the following properties:
- *    name: string literal for error purposes
- *    checker: function that will make the type checking
- */
-const types = {
-  string: {
-    name: 'string',
-    checker: v => typeof v === 'string'
-  },
-  number: {
-    name: 'number',
-    checker: v => typeof v === 'number'
-  },
-  boolean: {
-    name: 'boolean',
-    checker: v => typeof v === 'boolean'
-  },
-  null: {
-    name: 'null',
-    checker: v => typeof v === null
-  },
-  undefined: {
-    name: 'undefined',
-    checker: v => typeof v === 'undefined'
-  },
-  date: {
-    name: 'date',
-    checker: v => v instanceof Date
-  }
-};
+import { types } from './types';
 
 /**
  * Base Descriptor Object
@@ -42,7 +10,7 @@ const types = {
  */
 const baseDescriptor = {
   _mutableProperties: false,
-  _isDispatched: true
+  _isDispatched: true,
 };
 
 /**
@@ -55,7 +23,7 @@ const baseDescriptor = {
  * complaining about mutating directly the properties.
  */
 const dispatchedModel = {
-  _isDispatched: true
+  _isDispatched: true,
 };
 
 /**
@@ -154,7 +122,9 @@ const store = {
       if (!descriptor[key].checker(model[key])) {
         // If it's not a valid type, then throw an error complaining about it :)
         throw new Error(
-          `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a "${descriptor[key].name}"`
+          `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a "${
+            descriptor[key].name
+          }"`,
         );
       }
     });
@@ -272,7 +242,7 @@ const store = {
     }
     // Add the listener to the store
     this.listeners.set(store, listener);
-  }
+  },
 };
 
 export { types, store };
