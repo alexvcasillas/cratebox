@@ -8,26 +8,26 @@
 export const types = {
   string: {
     name: 'string',
-    checker: v => typeof v === 'string',
+    checker: (v: any) => typeof v === 'string'
   },
   number: {
     name: 'number',
-    checker: v => typeof v === 'number',
+    checker: (v: any) => typeof v === 'number'
   },
   boolean: {
     name: 'boolean',
-    checker: v => typeof v === 'boolean',
+    checker: (v: any) => typeof v === 'boolean'
   },
   null: {
     name: 'null',
-    checker: v => typeof v === null,
+    checker: (v: any) => typeof v === null
   },
   undefined: {
     name: 'undefined',
-    checker: v => typeof v === 'undefined',
+    checker: (v: any) => typeof v === 'undefined'
   },
   date: {
     name: 'date',
-    checker: v => v instanceof Date,
-  },
+    checker: (v: any) => v instanceof Date
+  }
 };

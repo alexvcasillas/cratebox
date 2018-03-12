@@ -48,10 +48,6 @@
           </button>
         </div>
 
-        <div class="text-center text-sm mt-4 text-grey">
-          Note: Open the console to see a warning when you
-          <br>try to time-travel beyond the limits of your store.
-        </div>
       </div>
       <div class="flex-1 text-left">
         <code id="state-display" class="text-grey-darker font-mono font-light"></code>
@@ -159,11 +155,11 @@
     }
   </style>
 
-  <script src="./store.0.0.3.umd.js"></script>
+  <script src="./typestore.umd.js"></script>
   <script>
+
     // Split store object into separate variables :)
-    const typeStore = store.store;
-    const types = store.types;
+    const types = typeStore.types;
 
     // DOM Objects
     let userAvatarElement = document.getElementById('user-avatar');
@@ -175,7 +171,7 @@
     let stateDisplay = document.getElementById('state-display');
 
     // Store Descriptions
-    typeStore.describeStore({
+    typeStore.store.describeStore({
       identifier: 'user',
       model: {
         name: types.string,
@@ -186,15 +182,15 @@
       }
     });
 
-    typeStore.subscribe('user', model => {
+    typeStore.store.subscribe('user', model => {
       userAvatarElement.src = model.avatar;
       userFullNameElement.textContent = model.name + " " + model.lastName;
       userPositionElement.textContent = model.position;
       userHireElement.setAttribute('href', model.github);
-      stateDisplay.innerText = JSON.stringify(typeStore.getState('user'), null, 2);
+      stateDisplay.innerText = JSON.stringify(typeStore.store.getState('user'), null, 2);
     });
 
-    typeStore.dispatch({
+    typeStore.store.dispatch({
       identifier: 'user',
       model: {
         name: 'Alex',
@@ -206,7 +202,7 @@
     })
 
     setTimeout(() => {
-      typeStore.dispatch({
+      typeStore.store.dispatch({
         identifier: 'user',
         model: {
           name: 'Antonio',
@@ -221,12 +217,12 @@
     // DOM Event Listeners
     travelBackwards.addEventListener('click', (e) => {
       console.log(`Let's travel backwards in time !!`);
-      typeStore.travelBackwards('user');
+      typeStore.store.travelBackwards('user');
     });
 
     travelForwards.addEventListener('click', (e) => {
       console.log(`Let's travel forwards in time !!`);
-      typeStore.travelForwards('user');
+      typeStore.store.travelForwards('user');
     });
 
   </script>

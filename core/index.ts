@@ -10,7 +10,7 @@ import { types } from './types';
  */
 const baseDescriptor = {
   _mutableProperties: false,
-  _isDispatched: true,
+  _isDispatched: true
 };
 
 /**
@@ -23,7 +23,7 @@ const baseDescriptor = {
  * complaining about mutating directly the properties.
  */
 const dispatchedModel = {
-  _isDispatched: true,
+  _isDispatched: true
 };
 
 /**
@@ -37,7 +37,7 @@ const TypeMap = function() {
   // Declare the custom map
   const typeMap = new Map();
   // Extend the set functionality
-  typeMap.set = function(...args): any {
+  typeMap.set = function(...args: any[]): any {
     // Check if this was a store dispatched action
     if (!args[1]._isDispatched) {
       // If it wasn't, then throw an error complaining about it :)
@@ -65,7 +65,7 @@ const store = {
    * This method describes a store based on a store model object.
    * @param {object} storeModel
    */
-  describeStore(storeModel) {
+  describeStore(storeModel: any) {
     // Check if we already have the given store described
     if (this.descriptions.has(storeModel.identifier)) {
       // If we do, then throw an error complaining about it :)
@@ -85,7 +85,7 @@ const store = {
    * the given description identifier.
    * @param {string} identifier
    */
-  getStoreDescription(identifier) {
+  getStoreDescription(identifier: any) {
     // Check if we have definied that store description
     if (!this.descriptions.has(identifier)) {
       // If we don't, then throw an error complaining about it :)
@@ -104,7 +104,7 @@ const store = {
    * This method returns the current state of an specified store
    * @param {string} identifier
    */
-  getState(identifier) {
+  getState(identifier: any) {
     const currentState = this.state.get(identifier).currentState;
     return this.state.get(identifier)._data.slice(currentState, currentState + 1)[0];
   },
@@ -113,7 +113,7 @@ const store = {
    * the given store action object.
    * @param {object} storeAction
    */
-  dispatch({ identifier, model }) {
+  dispatch({ identifier, model }: any) {
     // First we need to get the store descriptor
     const descriptor = this.getStoreDescription(identifier);
     // Then we need to iterate through all the properties of the model we want to dispatch
@@ -122,9 +122,7 @@ const store = {
       if (!descriptor[key].checker(model[key])) {
         // If it's not a valid type, then throw an error complaining about it :)
         throw new Error(
-          `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a "${
-            descriptor[key].name
-          }"`,
+          `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a "${descriptor[key].name}"`
         );
       }
     });
@@ -160,7 +158,7 @@ const store = {
       this.listeners.get(identifier)(nextStateObject);
     } else {
       // If not, we warn the user that the store has changed but there's no listener attached to it
-      console.warn('A store has changed but it has no listener attached to it.');
+      //console.warn('A store has changed but it has no listener attached to it.');
     }
   },
   /**
@@ -168,7 +166,7 @@ const store = {
    * by the given identifier.
    * @param {string} identifier
    */
-  travelForwards(identifier) {
+  travelForwards(identifier: string) {
     // Get the state
     const state = this.state.get(identifier);
     // Obtain the nextStateIndex that is the current state + 1
@@ -176,7 +174,7 @@ const store = {
     // Check if we have and index out of bounds :)
     if (nextStateIndex >= state._data.length) {
       // If we do, we warn the user that the store has nothing more beyond this state
-      console.warn(`You can't keep traveling forwards within this store`);
+      //console.warn(`You can't keep traveling forwards within this store`);
     } else {
       // Set the Current State to the next state index
       this.state.set(identifier, { ...state, currentState: nextStateIndex });
@@ -189,7 +187,7 @@ const store = {
    * by the given identifier.
    * @param {string} identifier
    */
-  travelBackwards(identifier) {
+  travelBackwards(identifier: string) {
     // Get the state
     const state = this.state.get(identifier);
     // Obtain the nextStateIndex that is the current state - 1
@@ -197,7 +195,7 @@ const store = {
     // Check if we have and index out of bounds :)
     if (previousStateIndex < 0) {
       // If we do, we warn the user that the store has nothing more beyond this state
-      console.warn(`You can't keep traveling backwards within this store`);
+      //console.warn(`You can't keep traveling backwards within this store`);
     } else {
       // Set the Current State to the next state index
       this.state.set(identifier, { ...state, currentState: previousStateIndex });
@@ -212,14 +210,14 @@ const store = {
    * @param {string} identifier
    * @param {number} index
    */
-  travelTo(identifier, index) {},
+  travelTo(identifier: string, index: number) {},
   /**
    * This method adds a subscription to a store making it reactive to changes
    * triggered by the store's dispatch method.
    * @param {string} store
    * @param {function} listener
    */
-  subscribe(store, listener) {
+  subscribe(store: string, listener: Function) {
     // Check if we have a defined store to attached the listener to
     if (typeof store === 'undefined') {
       // If we don't, then throw an error complaining about it :)
@@ -242,7 +240,7 @@ const store = {
     }
     // Add the listener to the store
     this.listeners.set(store, listener);
-  },
+  }
 };
 
 export { types, store };

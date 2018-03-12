@@ -1,6 +1,6 @@
 {
   "name": "typestore",
-  "version": "0.0.3",
+  "version": "0.1.4",
   "description": "My own implementation of a state management library",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "build": "rollup -c",
     "tsc": "tsc",
     "demo": "yarn tsc && yarn build && yarn cp-dist-demo && npx simplehttpserver ./demo",
-    "cp-dist-demo": "cpy dist/*.umd.js demo"
+    "cp-dist-demo": "cpy dist/typestore.umd.js demo"
   },
   "devDependencies": {
     "cpy-cli": "^1.0.1",

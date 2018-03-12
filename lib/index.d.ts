@@ -14,13 +14,10 @@ declare const store: {
     getStoreDescription(identifier: any): any;
     getGlobalState(): Map<any, any>;
     getState(identifier: any): any;
-    dispatch({ identifier, model }: {
-        identifier: any;
-        model: any;
-    }): void;
-    travelForwards(identifier: any): void;
-    travelBackwards(identifier: any): void;
-    travelTo(identifier: any, index: any): void;
-    subscribe(store: any, listener: any): void;
+    dispatch({ identifier, model }: any): void;
+    travelForwards(identifier: string): void;
+    travelBackwards(identifier: string): void;
+    travelTo(identifier: string, index: number): void;
+    subscribe(store: string, listener: Function): void;
 };
 export { types, store };
