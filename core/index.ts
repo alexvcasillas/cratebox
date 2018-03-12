@@ -37,7 +37,7 @@ const TypeMap = function() {
   // Declare the custom map
   const typeMap = new Map();
   // Extend the set functionality
-  typeMap.set = function(...args) {
+  typeMap.set = function(...args): any {
     // Check if this was a store dispatched action
     if (!args[1]._isDispatched) {
       // If it wasn't, then throw an error complaining about it :)

@@ -7,7 +7,7 @@ import pkg from './package.json';
 export default [
   // browser-friendly UMD build
   {
-    input: 'core/index.js',
+    input: 'lib/index.js',
     output: {
       name: 'store',
       file: `dist/store.${pkg.version}.umd.js`,
@@ -27,7 +27,7 @@ export default [
   // an array for the `output` option, where we can specify
   // `file` and `format` for each target)
   {
-    input: 'core/index.js',
+    input: 'lib/index.js',
     external: ['ms'],
     output: [
       { file: `dist/store.${pkg.version}.cjs.js`, format: 'cjs' },
