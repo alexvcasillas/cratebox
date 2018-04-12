@@ -36,7 +36,7 @@ yarn add CrateBox
 To get started with **CrateBox** first of all you need to import the dependency into your project plus the typings dependency for your models.
 
 ```
-import { cratebox, types } from 'CrateBox`
+import { cratebox, types } from 'cratebox`
 ```
 
 From that point on, you'll have access to the full API of **CrateBox**.
