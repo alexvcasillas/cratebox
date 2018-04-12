@@ -1,11 +1,18 @@
 import { types } from './types';
 /**
+ * TypeMap Object
+ * The TypeMap Object is a small override of the
+ * default Map.set() functionality.
+ * With this small override we ensure that Map.set()
+ * is always called within a store's dispatch method.
+ */
+/**
  * Store System
  * Store System consists on an object that will be in charge of
  * describing the stores within it, dispatching store changes and
  * returning the current state of the store.
  */
-declare const store: {
+declare const typeStore: {
     descriptions: Map<any, any>;
     state: Map<any, any>;
     listeners: Map<any, any>;
@@ -20,4 +27,4 @@ declare const store: {
     travelTo(identifier: string, index: number): void;
     subscribe(store: string, listener: Function): void;
 };
-export { types, store };
+export { types, typeStore };

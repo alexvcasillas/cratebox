@@ -33,20 +33,21 @@ const dispatchedModel = {
  * With this small override we ensure that Map.set()
  * is always called within a store's dispatch method.
  */
-const TypeMap = function() {
-  // Declare the custom map
-  const typeMap = new Map();
-  // Extend the set functionality
-  typeMap.set = function(...args: any[]): any {
-    // Check if this was a store dispatched action
-    if (!args[1]._isDispatched) {
-      // If it wasn't, then throw an error complaining about it :)
-      throw new Error(`Direct state manipulation is not allowed. Use the store's dispatch method instead.`);
-    }
-  };
-  // Return the new TypeMap Object :)
-  return typeMap;
-};
+
+// const TypeMap = function() {
+//   // Declare the custom map
+//   const typeMap = new Map();
+//   // Extend the set functionality
+//   typeMap.set = function(...args: any[]): any {
+//     // Check if this was a store dispatched action
+//     if (!args[1]._isDispatched) {
+//       // If it wasn't, then throw an error complaining about it :)
+//       throw new Error(`Direct state manipulation is not allowed. Use the store's dispatch method instead.`);
+//     }
+//   };
+//   // Return the new TypeMap Object :)
+//   return typeMap;
+// };
 
 /**
  * Store System
@@ -54,7 +55,7 @@ const TypeMap = function() {
  * describing the stores within it, dispatching store changes and
  * returning the current state of the store.
  */
-const store = {
+const typeStore = {
   // Map that contains all of the store definitions
   descriptions: new Map(),
   // Map that contains all of the store changes based on the store definitions
@@ -243,4 +244,4 @@ const store = {
   }
 };
 
-export { types, store };
+export { types, typeStore };

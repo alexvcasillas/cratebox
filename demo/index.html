@@ -71,10 +71,10 @@
       <div class="flex-1">
         <h2 class="text-xl font-light mb-1 text-grey-darkest mb-2">Small</h2>
         <p>
-          <strong class="font-medium">Bundle size:</strong> 2.42 KB
+          <strong class="font-medium">Bundle size:</strong> 12.47 KB
           <br>
           <strong class="font-medium">Gzipped size:</strong>
-          <span class="text-green-light">936 B</span>
+          <span class="text-green-light">3.23 KB</span>
           <br> Not bad, uh?
         </p>
       </div>
@@ -171,7 +171,7 @@
     let stateDisplay = document.getElementById('state-display');
 
     // Store Descriptions
-    typeStore.store.describeStore({
+    typeStore.typeStore.describeStore({
       identifier: 'user',
       model: {
         name: types.string,
@@ -182,15 +182,15 @@
       }
     });
 
-    typeStore.store.subscribe('user', model => {
+    typeStore.typeStore.subscribe('user', model => {
       userAvatarElement.src = model.avatar;
       userFullNameElement.textContent = model.name + " " + model.lastName;
       userPositionElement.textContent = model.position;
       userHireElement.setAttribute('href', model.github);
-      stateDisplay.innerText = JSON.stringify(typeStore.store.getState('user'), null, 2);
+      stateDisplay.innerText = JSON.stringify(typeStore.typeStore.getState('user'), null, 2);
     });
 
-    typeStore.store.dispatch({
+    typeStore.typeStore.dispatch({
       identifier: 'user',
       model: {
         name: 'Alex',
@@ -202,7 +202,7 @@
     })
 
     setTimeout(() => {
-      typeStore.store.dispatch({
+      typeStore.typeStore.dispatch({
         identifier: 'user',
         model: {
           name: 'Antonio',
@@ -217,12 +217,12 @@
     // DOM Event Listeners
     travelBackwards.addEventListener('click', (e) => {
       console.log(`Let's travel backwards in time !!`);
-      typeStore.store.travelBackwards('user');
+      typeStore.typeStore.travelBackwards('user');
     });
 
     travelForwards.addEventListener('click', (e) => {
       console.log(`Let's travel forwards in time !!`);
-      typeStore.store.travelForwards('user');
+      typeStore.typeStore.travelForwards('user');
     });
 
   </script>
