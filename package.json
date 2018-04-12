@@ -1,6 +1,6 @@
 {
   "name": "cratebox",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "State Management Library",
   "main": "dist/cratebox.js",
   "scripts": {
@@ -28,10 +28,7 @@
     "type": "git",
     "url": "git+https://github.com/alexvcasillas/cratebox.git"
   },
-  "keywords": [
-    "state",
-    "management"
-  ],
+  "keywords": ["state", "management"],
   "author": "Alex Casillas <https://alexvcasillas.com>",
   "license": "MIT",
   "dependencies": {}
