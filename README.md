@@ -1,6 +1,6 @@
-# Typestore
+# CrateBox
 
-TypeStore is an Opinionated State Management library for no particular UI library.
+CrateBox is an Opinionated State Management library for no particular UI library.
 
 # Contents
 
@@ -22,29 +22,29 @@ TypeStore is an Opinionated State Management library for no particular UI librar
 NPM
 
 ```
-npm install typestore
+npm install CrateBox
 ```
 
 Yarn
 
 ```
-yarn add typestore
+yarn add CrateBox
 ```
 
 # Getting Started
 
-To get started with **TypeStore** first of all you need to import the dependency into your project plus the typings dependency for your models.
+To get started with **CrateBox** first of all you need to import the dependency into your project plus the typings dependency for your models.
 
 ```
-import { typeStore, types } from 'typestore`
+import { cratebox, types } from 'CrateBox`
 ```
 
-From that point on, you'll have access to the full API of **TypeStore**.
+From that point on, you'll have access to the full API of **CrateBox**.
 
 # Describing a Store
 
 ```
-typeStore.describeStore({
+cratebox.describeStore({
   identifier: 'user',
   model: {
     name: types.string,
@@ -60,7 +60,7 @@ typeStore.describeStore({
 
 Let's take a look at the example above and let's get though all of the details.
 
-First of all we have the `describeStore` function. This function is the one in charge to tell **TypeStore** that we would like to describe a new store were we will put our state.
+First of all we have the `describeStore` function. This function is the one in charge to tell **CrateBox** that we would like to describe a new store were we will put our state.
 
 The `describeStore` function takes on parameter that is an object will the following structure:
 
@@ -71,7 +71,7 @@ The `describeStore` function takes on parameter that is an object will the follo
 }
 ```
 
-The `identifier` property represents the name of the store you're describing, therefore, this will be the name you'll be using latter on to deal with this particular store within **TypeStore**.
+The `identifier` property represents the name of the store you're describing, therefore, this will be the name you'll be using latter on to deal with this particular store within **CrateBox**.
 
 The `model` property is a `model object` that represents all of the properties that you're identified store will contain. This properties could be any of the properties that we will describe later on. This properties are typed by our own typing system and will let you build rock-solid-typed models.
 
@@ -91,14 +91,14 @@ Many of the properties described above are of type `string`, meaning that no mat
 
 There's also a type `number` and a type `date` there, meaning that, the property `age` will only be able to store numeric data and the `birthDate` property will only be able to store instances of the `Date` type.
 
-Ok, we've described our store so far at this point. Let's proceed with more stuff about **TypeStore**.
+Ok, we've described our store so far at this point. Let's proceed with more stuff about **CrateBox**.
 
 # Dispatching changes
 
-To dispatch a change into a store, we will call the `dispatch` function from the **TypeStore** API.
+To dispatch a change into a store, we will call the `dispatch` function from the **CrateBox** API.
 
 ```
-typeStore.dispatch({
+cratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Alex',
@@ -125,12 +125,12 @@ The `dispatch` function takes on single argument that is a `dispatch object`. Th
 
 See some resemblance from something we described before? That's it! It has the same structure that our `described store`! That makes things even more easy to deal with.
 
-The `identifier` property will tell **TypeStore** which of the `described stores` is the one that's getting a change. In the example above, `user` store is the one that's getting a change dispatched.
+The `identifier` property will tell **CrateBox** which of the `described stores` is the one that's getting a change. In the example above, `user` store is the one that's getting a change dispatched.
 
 We can dispatch as many changes to a store as we want. You have to consider that you dispatch changes to a model, meaning that, calling the `dispatch` event with the following data:
 
 ```
-typeStore.dispatch({
+cratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Antonio',
@@ -169,7 +169,7 @@ As you can see, it will generate changes based on the previous state, making sur
 You also have to take note that properties that _are not described_ at the `describeStore()` function, won't affect your state if you try to dispatch properties not defined previously. For example:
 
 ```
-typeStore.dispatch({
+cratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Antonio',
@@ -190,7 +190,7 @@ This method will retrieve the current state of a store by the given identifier. 
 
 ```
 // Describe the store
-typeStore.describeStore({
+cratebox.describeStore({
   identifier: 'user',
   model: {
     name: types.string,
@@ -199,7 +199,7 @@ typeStore.describeStore({
 });
 
 // Dispatch a new change at the user store
-typeStore.dispatch({
+cratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Alex',
@@ -208,7 +208,7 @@ typeStore.dispatch({
 })
 
 // Call the Get State method
-console.log( typeStore.getState('user') );
+console.log( cratebox.getState('user') );
 ```
 
 The code above will give you the following output in your console:
@@ -227,7 +227,7 @@ Subscriptions will let you listen to changes to a given store. This way you'll b
 The way of subscribing to changes within a particular store is:
 
 ```
-typeStore.subscribe('user', model => {
+cratebox.subscribe('user', model => {
   // Handle your changes the way you want here :)
 });
 ```
@@ -240,7 +240,7 @@ Let's see the following case as example:
 
 ```
 // Describe the store
-typeStore.describeStore({
+cratebox.describeStore({
   identifier: 'user',
   model: {
     name: types.string,
@@ -249,12 +249,12 @@ typeStore.describeStore({
 });
 
 // Create a subscriber for the user store
-typeStore.subscribe('user', model => {
+cratebox.subscribe('user', model => {
   console.log(model);
 })
 
 // Dispatch a new change at the user store
-typeStore.dispatch({
+cratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Antonio',
@@ -281,13 +281,13 @@ Time traveling is supported out of the box for you. We expose a simple API that 
 Let's say you want to travel backgrounds in your store, then you simply:
 
 ```
-typeStore.travelBackwards('user');
+cratebox.travelBackwards('user');
 ```
 
 Or let's say you want to travel forwards after you just traveled backwards, simply:
 
 ```
-typeStore.travelForwards('user');
+cratebox.travelForwards('user');
 ```
 
 Let's dive a little into the Time Traveling API. It's simple, we expose to methods: `travelBackwards` and `travelForwards`.
@@ -298,7 +298,7 @@ Let's take a look at this with a little example:
 
 ```
 // Describe the store
-typeStore.describeStore({
+cratebox.describeStore({
   identifier: 'user',
   model: {
     name: types.string,
@@ -307,12 +307,12 @@ typeStore.describeStore({
 });
 
 // Create a subscriber for the user store
-typeStore.subscribe('user', model => {
+cratebox.subscribe('user', model => {
   console.log('Store Changes: ', model);
 })
 
 // Dispatch a new change at the user store
-typeStore.dispatch({
+cratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Alex',
@@ -321,7 +321,7 @@ typeStore.dispatch({
 })
 
 // Dispatch another change at the user store
-typeStore.dispatch({
+cratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Antonio',
@@ -330,9 +330,9 @@ typeStore.dispatch({
 })
 
 // Call the Travel Backwards method
-typeStore.travelBackwards('user');
+cratebox.travelBackwards('user');
 // Call the Travel Forwards method
-typeStore.travelForwards('user');
+cratebox.travelForwards('user');
 ```
 
 When executing the example above you'll have the following output:
@@ -352,13 +352,13 @@ If you have noticed, the same `subscription` you've created for listening to cha
 
 # Types
 
-**TypeStore** is a typed state management library and therefore, comes bundled with basic types plus some advanced types.
+**CrateBox** is a typed state management library and therefore, comes bundled with basic types plus some advanced types.
 
 All of the types are to be imported from the `types` namespace.
 
 ## Basic Types
 
-The basic types of **TypeStore** are the following and self explanatory
+The basic types of **CrateBox** are the following and self explanatory
 
 * types.string
 * types.number
@@ -369,7 +369,7 @@ The basic types of **TypeStore** are the following and self explanatory
 
 ## Advanced Types
 
-The advanced types of **TypeStore** are currently a work in progress but will contain some of the following types for your use:
+The advanced types of **CrateBox** are currently a work in progress but will contain some of the following types for your use:
 
 * types.array
 * types.frozen
