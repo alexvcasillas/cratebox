@@ -10,7 +10,7 @@ import { types } from './types';
  */
 const baseDescriptor = {
   _mutableProperties: false,
-  _isDispatched: true
+  _isDispatched: true,
 };
 
 /**
@@ -23,7 +23,7 @@ const baseDescriptor = {
  * complaining about mutating directly the properties.
  */
 const dispatchedModel = {
-  _isDispatched: true
+  _isDispatched: true,
 };
 
 /**
@@ -55,7 +55,7 @@ const dispatchedModel = {
  * describing the stores within it, dispatching store changes and
  * returning the current state of the store.
  */
-const typeStore = {
+const cratebox = {
   // Map that contains all of the store definitions
   descriptions: new Map(),
   // Map that contains all of the store changes based on the store definitions
@@ -123,7 +123,9 @@ const typeStore = {
       if (!descriptor[key].checker(model[key])) {
         // If it's not a valid type, then throw an error complaining about it :)
         throw new Error(
-          `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a "${descriptor[key].name}"`
+          `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a "${
+            descriptor[key].name
+          }"`,
         );
       }
     });
@@ -241,7 +243,7 @@ const typeStore = {
     }
     // Add the listener to the store
     this.listeners.set(store, listener);
-  }
+  },
 };
 
-export { types, typeStore };
+export { types, cratebox };

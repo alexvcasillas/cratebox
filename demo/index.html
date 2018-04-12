@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>TypeStore Demo</title>
+  <title>CrateBox Demo</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/preflight.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/utilities.min.css" rel="stylesheet">
@@ -14,7 +14,7 @@
 <body class="font-sans bg-grey-lightest">
 
   <div id="heading" class="text-center">
-    <h1 class="text-4xl font-light mb-2">TypeStore</h1>
+    <h1 class="text-4xl font-light mb-2">CrateBox</h1>
     <h2 class="text-xl font-light">State Management Library</h2>
   </div>
 
@@ -155,11 +155,11 @@
     }
   </style>
 
-  <script src="./typestore.umd.js"></script>
+  <script src="./cratebox.umd.js"></script>
   <script>
 
     // Split store object into separate variables :)
-    const types = typeStore.types;
+    const types = cratebox.types;
 
     // DOM Objects
     let userAvatarElement = document.getElementById('user-avatar');
@@ -171,7 +171,7 @@
     let stateDisplay = document.getElementById('state-display');
 
     // Store Descriptions
-    typeStore.typeStore.describeStore({
+    cratebox.cratebox.describeStore({
       identifier: 'user',
       model: {
         name: types.string,
@@ -182,15 +182,15 @@
       }
     });
 
-    typeStore.typeStore.subscribe('user', model => {
+    cratebox.cratebox.subscribe('user', model => {
       userAvatarElement.src = model.avatar;
       userFullNameElement.textContent = model.name + " " + model.lastName;
       userPositionElement.textContent = model.position;
       userHireElement.setAttribute('href', model.github);
-      stateDisplay.innerText = JSON.stringify(typeStore.typeStore.getState('user'), null, 2);
+      stateDisplay.innerText = JSON.stringify(cratebox.cratebox.getState('user'), null, 2);
     });
 
-    typeStore.typeStore.dispatch({
+    cratebox.cratebox.dispatch({
       identifier: 'user',
       model: {
         name: 'Alex',
@@ -202,7 +202,7 @@
     })
 
     setTimeout(() => {
-      typeStore.typeStore.dispatch({
+      cratebox.cratebox.dispatch({
         identifier: 'user',
         model: {
           name: 'Antonio',
@@ -217,12 +217,12 @@
     // DOM Event Listeners
     travelBackwards.addEventListener('click', (e) => {
       console.log(`Let's travel backwards in time !!`);
-      typeStore.typeStore.travelBackwards('user');
+      cratebox.cratebox.travelBackwards('user');
     });
 
     travelForwards.addEventListener('click', (e) => {
       console.log(`Let's travel forwards in time !!`);
-      typeStore.typeStore.travelForwards('user');
+      cratebox.cratebox.travelForwards('user');
     });
 
   </script>

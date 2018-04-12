@@ -6,26 +6,26 @@ export default [
   {
     input: './lib/index.js',
     output: {
-      file: './dist/typestore.js',
-      format: 'cjs'
+      file: './dist/cratebox.js',
+      format: 'cjs',
     },
-    plugins: [resolve(), filesize()]
+    plugins: [resolve(), filesize()],
   },
   {
     input: './lib/index.js',
     output: {
-      file: './dist/typestore.umd.js',
+      file: './dist/cratebox.umd.js',
       format: 'umd',
-      name: 'typeStore'
+      name: 'cratebox',
     },
-    plugins: [resolve(), uglify(), filesize()]
+    plugins: [resolve(), uglify(), filesize()],
   },
   {
     input: './lib/index.js',
     output: {
-      file: './dist/typestore.module.js',
-      format: 'es'
+      file: './dist/cratebox.module.js',
+      format: 'es',
     },
-    plugins: [resolve(), filesize()]
-  }
+    plugins: [resolve(), filesize()],
+  },
 ];

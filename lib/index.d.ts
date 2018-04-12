@@ -12,7 +12,7 @@ import { types } from './types';
  * describing the stores within it, dispatching store changes and
  * returning the current state of the store.
  */
-declare const typeStore: {
+declare const cratebox: {
     descriptions: Map<any, any>;
     state: Map<any, any>;
     listeners: Map<any, any>;
@@ -27,4 +27,4 @@ declare const typeStore: {
     travelTo(identifier: string, index: number): void;
     subscribe(store: string, listener: Function): void;
 };
-export { types, typeStore };
+export { types, cratebox };

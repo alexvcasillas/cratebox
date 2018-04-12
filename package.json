@@ -1,15 +1,15 @@
 {
-  "name": "typestore",
-  "version": "0.1.4",
+  "name": "cratebox",
+  "version": "0.2.0",
   "description": "State Management Library",
-  "main": "dist/typestore.js",
+  "main": "dist/cratebox.js",
   "scripts": {
     "start": "node core/index.js",
     "rollup": "rollup -c",
     "tsc": "tsc",
     "demo": "yarn tsc && yarn rollup && yarn cp-dist-demo && npx simplehttpserver ./demo",
-    "cp-dist-demo": "cpy dist/typestore.umd.js demo",
-    "prepublish": "yarn tsc && yarn rollup",
+    "cp-dist-demo": "cpy dist/cratebox.umd.js demo",
+    "prepare": "yarn tsc && yarn rollup",
     "publish": "np"
   },
   "devDependencies": {
@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexvcasillas/typestore.git"
+    "url": "git+https://github.com/alexvcasillas/cratebox.git"
   },
   "keywords": ["state", "management"],
   "author": "Alex Casillas <https://alexvcasillas.com>",
