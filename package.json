@@ -10,7 +10,7 @@
     "demo": "yarn tsc && yarn rollup && yarn cp-dist-demo && npx simplehttpserver ./demo",
     "cp-dist-demo": "cpy dist/cratebox.umd.js demo",
     "prepare": "yarn tsc && yarn rollup",
-    "publish": "np"
+    "release": "np"
   },
   "devDependencies": {
     "cpy-cli": "^1.0.1",
@@ -28,10 +28,7 @@
     "type": "git",
     "url": "git+https://github.com/alexvcasillas/cratebox.git"
   },
-  "keywords": [
-    "state",
-    "management"
-  ],
+  "keywords": ["state", "management"],
   "author": "Alex Casillas <https://alexvcasillas.com>",
   "license": "MIT",
   "dependencies": {}
