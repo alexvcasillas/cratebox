@@ -22,13 +22,13 @@ CrateBox is an Opinionated State Management library for no particular UI library
 NPM
 
 ```
-npm install CrateBox
+npm install cratebox
 ```
 
 Yarn
 
 ```
-yarn add CrateBox
+yarn add cratebox
 ```
 
 # Getting Started
