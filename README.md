@@ -44,7 +44,7 @@ From that point on, you'll have access to the full API of **TypeStore**.
 # Describing a Store
 
 ```
-store.describeStore({
+typeStore.describeStore({
   identifier: 'user',
   model: {
     name: types.string,
@@ -190,7 +190,7 @@ This method will retrieve the current state of a store by the given identifier. 
 
 ```
 // Describe the store
-store.describeStore({
+typeStore.describeStore({
   identifier: 'user',
   model: {
     name: types.string,
@@ -199,7 +199,7 @@ store.describeStore({
 });
 
 // Dispatch a new change at the user store
-store.dispatch({
+typeStore.dispatch({
   identifier: 'user',
   model: {
     name: 'Alex',
@@ -208,7 +208,7 @@ store.dispatch({
 })
 
 // Call the Get State method
-console.log( store.getState('user') );
+console.log( typeStore.getState('user') );
 ```
 
 The code above will give you the following output in your console:
@@ -240,7 +240,7 @@ Let's see the following case as example:
 
 ```
 // Describe the store
-store.describeStore({
+typeStore.describeStore({
   identifier: 'user',
   model: {
     name: types.string,
@@ -249,12 +249,12 @@ store.describeStore({
 });
 
 // Create a subscriber for the user store
-store.subscribe('user', model => {
+typeStore.subscribe('user', model => {
   console.log(model);
 })
 
 // Dispatch a new change at the user store
-store.dispatch({
+typeStore.dispatch({
   identifier: 'user',
   model: {
     name: 'Antonio',
@@ -298,7 +298,7 @@ Let's take a look at this with a little example:
 
 ```
 // Describe the store
-store.describeStore({
+typeStore.describeStore({
   identifier: 'user',
   model: {
     name: types.string,
@@ -307,12 +307,12 @@ store.describeStore({
 });
 
 // Create a subscriber for the user store
-store.subscribe('user', model => {
+typeStore.subscribe('user', model => {
   console.log('Store Changes: ', model);
 })
 
 // Dispatch a new change at the user store
-store.dispatch({
+typeStore.dispatch({
   identifier: 'user',
   model: {
     name: 'Alex',
@@ -321,7 +321,7 @@ store.dispatch({
 })
 
 // Dispatch another change at the user store
-store.dispatch({
+typeStore.dispatch({
   identifier: 'user',
   model: {
     name: 'Antonio',
@@ -330,9 +330,9 @@ store.dispatch({
 })
 
 // Call the Travel Backwards method
-store.travelBackwards('user');
+typeStore.travelBackwards('user');
 // Call the Travel Forwards method
-store.travelForwards('user');
+typeStore.travelForwards('user');
 ```
 
 When executing the example above you'll have the following output:
