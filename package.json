@@ -1,6 +1,6 @@
 {
   "name": "cratebox",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "State Management Library",
   "main": "dist/cratebox.js",
   "scripts": {
@@ -9,12 +9,13 @@
     "tsc": "tsc",
     "demo": "yarn tsc && yarn rollup && yarn cp-dist-demo && npx simplehttpserver ./demo",
     "cp-dist-demo": "cpy dist/cratebox.umd.js demo",
-    "prepare": "yarn tsc && yarn rollup",
-    "release": "np"
+    "test": "yarn prepare && jest",
+    "prepare": "yarn tsc && yarn rollup"
   },
   "devDependencies": {
+    "@types/jest": "^22.2.3",
     "cpy-cli": "^1.0.1",
-    "np": "^2.20.1",
+    "jest": "^22.4.3",
     "rollup": "^0.57.1",
     "rollup-plugin-commonjs": "^9.1.0",
     "rollup-plugin-filesize": "^1.5.0",

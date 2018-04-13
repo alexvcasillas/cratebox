@@ -20,7 +20,7 @@ export const types = {
   },
   null: {
     name: 'null',
-    checker: (v: any) => typeof v === null
+    checker: (v: any) => v === null
   },
   undefined: {
     name: 'undefined',

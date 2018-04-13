@@ -10,7 +10,7 @@ import { types } from './types';
  * complaining about mutating directly the properties.
  */
 const dispatchedModel = {
-  _isDispatched: true,
+  _isDispatched: true
 };
 
 /**
@@ -87,9 +87,7 @@ const cratebox = {
       if (!descriptor[key].checker(model[key])) {
         // If it's not a valid type, then throw an error complaining about it :)
         throw new Error(
-          `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a "${
-            descriptor[key].name
-          }"`,
+          `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a "${descriptor[key].name}"`
         );
       }
     });
@@ -146,7 +144,14 @@ const cratebox = {
       // Set the Current State to the next state index
       this.state.set(identifier, { ...state, currentState: nextStateIndex });
       // Then call the subscribed listener of the store with the current state :)
-      this.listeners.get(identifier)(this.getState(identifier));
+      // Check if we have a listener subscribing to this store
+      if (this.listeners.has(identifier)) {
+        // If we do, then we should call the listener :)
+        this.listeners.get(identifier)(this.getState(identifier));
+      } else {
+        // If not, we warn the user that the store has changed but there's no listener attached to it
+        //console.warn('A store has changed but it has no listener attached to it.');
+      }
     }
   },
   /**
@@ -167,7 +172,14 @@ const cratebox = {
       // Set the Current State to the next state index
       this.state.set(identifier, { ...state, currentState: previousStateIndex });
       // Then call the subscribed listener of the store with the current state :)
-      this.listeners.get(identifier)(this.getState(identifier));
+      // Check if we have a listener subscribing to this store
+      if (this.listeners.has(identifier)) {
+        // If we do, then we should call the listener :)
+        this.listeners.get(identifier)(this.getState(identifier));
+      } else {
+        // If not, we warn the user that the store has changed but there's no listener attached to it
+        //console.warn('A store has changed but it has no listener attached to it.');
+      }
     }
   },
   /**
@@ -207,7 +219,7 @@ const cratebox = {
     }
     // Add the listener to the store
     this.listeners.set(store, listener);
-  },
+  }
 };
 
 export { types, cratebox };
