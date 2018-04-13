@@ -26,6 +26,10 @@ test('it should describe another store', () => {
   expect(cratebox.descriptions.size).toBe(2);
 });
 
+test('it tries to get the state without any previously dispatched changes', () => {
+  expect(cratebox.getState('user')).toBe(null);
+});
+
 test('it should dispatch a change to a store', () => {
   cratebox.dispatch({
     identifier: 'user',

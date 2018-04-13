@@ -70,8 +70,12 @@ const cratebox = {
    * @param {string} identifier
    */
   getState(identifier: any) {
-    const currentState = this.state.get(identifier).currentState;
-    return this.state.get(identifier)._data.slice(currentState, currentState + 1)[0];
+    if (this.state.get(identifier)) {
+      const currentState = this.state.get(identifier).currentState;
+      return this.state.get(identifier)._data.slice(currentState, currentState + 1)[0];
+    } else {
+      return null;
+    }
   },
   /**
    * This method dispatches a new store action to the store by
