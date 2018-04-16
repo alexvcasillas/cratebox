@@ -23,3 +23,15 @@ test('it should be of type undefined', () => {
 test('it should be of type date', () => {
   expect(types.date.checker(new Date())).toBe(true);
 });
+
+test('it should be of type array of strings', () => {
+  expect(types.array(types.string).checker(['hola', 'mundo'])).toBe(true);
+});
+
+test('it should be of type array of numbers', () => {
+  expect(types.array(types.number).checker([23, 3, 1990])).toBe(true);
+});
+
+test('it should be of type array of boolean', () => {
+  expect(true).toBe(true);
+});

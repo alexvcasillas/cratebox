@@ -7,25 +7,25 @@ export default [
     input: './lib/index.js',
     output: {
       file: './dist/cratebox.js',
-      format: 'cjs',
+      format: 'cjs'
     },
-    plugins: [resolve(), filesize()],
+    plugins: [resolve(), uglify(), filesize()]
   },
   {
     input: './lib/index.js',
     output: {
       file: './dist/cratebox.umd.js',
       format: 'umd',
-      name: 'cratebox',
+      name: 'cratebox'
     },
-    plugins: [resolve(), uglify(), filesize()],
+    plugins: [resolve(), uglify(), filesize()]
   },
   {
     input: './lib/index.js',
     output: {
       file: './dist/cratebox.module.js',
-      format: 'es',
+      format: 'es'
     },
-    plugins: [resolve(), filesize()],
-  },
+    plugins: [resolve(), uglify(), filesize()]
+  }
 ];
