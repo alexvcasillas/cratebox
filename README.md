@@ -37,6 +37,8 @@ To get started with **CrateBox** first of all you need to import the dependency 
 
 ```
 import { cratebox, types } from 'cratebox`
+// Instantiate CrateBox
+const myCratebox = cratebox();
 ```
 
 From that point on, you'll have access to the full API of **CrateBox**.
@@ -44,7 +46,7 @@ From that point on, you'll have access to the full API of **CrateBox**.
 # Describing a Store
 
 ```
-cratebox.describeStore({
+myCratebox.describeStore({
   identifier: 'user',
   model: {
     name: types.string,
@@ -98,7 +100,7 @@ Ok, we've described our store so far at this point. Let's proceed with more stuf
 To dispatch a change into a store, we will call the `dispatch` function from the **CrateBox** API.
 
 ```
-cratebox.dispatch({
+myCratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Alex',
@@ -130,7 +132,7 @@ The `identifier` property will tell **CrateBox** which of the `described stores`
 We can dispatch as many changes to a store as we want. You have to consider that you dispatch changes to a model, meaning that, calling the `dispatch` event with the following data:
 
 ```
-cratebox.dispatch({
+myCratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Antonio',
@@ -169,7 +171,7 @@ As you can see, it will generate changes based on the previous state, making sur
 You also have to take note that properties that _are not described_ at the `describeStore()` function, won't affect your state if you try to dispatch properties not defined previously. For example:
 
 ```
-cratebox.dispatch({
+myCratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Antonio',
@@ -190,7 +192,7 @@ This method will retrieve the current state of a store by the given identifier. 
 
 ```
 // Describe the store
-cratebox.describeStore({
+myCratebox.describeStore({
   identifier: 'user',
   model: {
     name: types.string,
@@ -199,7 +201,7 @@ cratebox.describeStore({
 });
 
 // Dispatch a new change at the user store
-cratebox.dispatch({
+myCratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Alex',
@@ -208,7 +210,7 @@ cratebox.dispatch({
 })
 
 // Call the Get State method
-console.log( cratebox.getState('user') );
+console.log( myCratebox.getState('user') );
 ```
 
 The code above will give you the following output in your console:
@@ -227,7 +229,7 @@ Subscriptions will let you listen to changes to a given store. This way you'll b
 The way of subscribing to changes within a particular store is:
 
 ```
-cratebox.subscribe('user', model => {
+myCratebox.subscribe('user', model => {
   // Handle your changes the way you want here :)
 });
 ```
@@ -240,7 +242,7 @@ Let's see the following case as example:
 
 ```
 // Describe the store
-cratebox.describeStore({
+myCratebox.describeStore({
   identifier: 'user',
   model: {
     name: types.string,
@@ -249,12 +251,12 @@ cratebox.describeStore({
 });
 
 // Create a subscriber for the user store
-cratebox.subscribe('user', model => {
+myCratebox.subscribe('user', model => {
   console.log(model);
 })
 
 // Dispatch a new change at the user store
-cratebox.dispatch({
+myCratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Antonio',
@@ -281,13 +283,13 @@ Time traveling is supported out of the box for you. We expose a simple API that 
 Let's say you want to travel backgrounds in your store, then you simply:
 
 ```
-cratebox.travelBackwards('user');
+myCratebox.travelBackwards('user');
 ```
 
 Or let's say you want to travel forwards after you just traveled backwards, simply:
 
 ```
-cratebox.travelForwards('user');
+myCratebox.travelForwards('user');
 ```
 
 Let's dive a little into the Time Traveling API. It's simple, we expose to methods: `travelBackwards` and `travelForwards`.
@@ -298,7 +300,7 @@ Let's take a look at this with a little example:
 
 ```
 // Describe the store
-cratebox.describeStore({
+myCratebox.describeStore({
   identifier: 'user',
   model: {
     name: types.string,
@@ -307,12 +309,12 @@ cratebox.describeStore({
 });
 
 // Create a subscriber for the user store
-cratebox.subscribe('user', model => {
+myCratebox.subscribe('user', model => {
   console.log('Store Changes: ', model);
 })
 
 // Dispatch a new change at the user store
-cratebox.dispatch({
+myCratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Alex',
@@ -321,7 +323,7 @@ cratebox.dispatch({
 })
 
 // Dispatch another change at the user store
-cratebox.dispatch({
+myCratebox.dispatch({
   identifier: 'user',
   model: {
     name: 'Antonio',
@@ -330,9 +332,9 @@ cratebox.dispatch({
 })
 
 // Call the Travel Backwards method
-cratebox.travelBackwards('user');
+myCratebox.travelBackwards('user');
 // Call the Travel Forwards method
-cratebox.travelForwards('user');
+myCratebox.travelForwards('user');
 ```
 
 When executing the example above you'll have the following output:
@@ -371,7 +373,28 @@ The basic types of **CrateBox** are the following and self explanatory
 
 The advanced types of **CrateBox** are currently a work in progress but will contain some of the following types for your use:
 
-* types.array
+### types.array(type: base)
+
+The array type recieves a basic type as a single parámeter and will make sure that all of the values stored at the array are solely that type.
+
+For example:
+
+```
+myCratebox.describeStore({
+  identifier: 'user',
+  model: {
+    name: types.string,
+    lastName: types.string,
+    notes: types.array(types.string)
+  }
+});
+```
+
+If you try to include any type different from the base string type it will complain and throw an error.
+
+Some of the types that are pending to implement but are in the roadmap are:
+
+* types.array(type: base)
 * types.frozen
 * types.literal
 * types.enumeration

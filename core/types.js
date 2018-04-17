@@ -1,5 +1,5 @@
 import { baseTypes } from './types/base';
-import { advancedTypes, baseType, arrayType } from './types/advanced';
+import { advancedTypes } from './types/advanced';
 
 export const types = {
   ...baseTypes,

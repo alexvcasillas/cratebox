@@ -159,6 +159,7 @@
   <script>
 
     // Split store object into separate variables :)
+    const crate = cratebox.cratebox();
     const types = cratebox.types;
 
     // DOM Objects
@@ -171,7 +172,7 @@
     let stateDisplay = document.getElementById('state-display');
 
     // Store Descriptions
-    cratebox.cratebox.describeStore({
+    crate.describeStore({
       identifier: 'user',
       model: {
         name: types.string,
@@ -182,15 +183,15 @@
       }
     });
 
-    cratebox.cratebox.subscribe('user', model => {
+    crate.subscribe('user', model => {
       userAvatarElement.src = model.avatar;
       userFullNameElement.textContent = model.name + " " + model.lastName;
       userPositionElement.textContent = model.position;
       userHireElement.setAttribute('href', model.github);
-      stateDisplay.innerText = JSON.stringify(cratebox.cratebox.getState('user'), null, 2);
+      stateDisplay.innerText = JSON.stringify(crate.getState('user'), null, 2);
     });
 
-    cratebox.cratebox.dispatch({
+    crate.dispatch({
       identifier: 'user',
       model: {
         name: 'Alex',
@@ -202,7 +203,7 @@
     })
 
     setTimeout(() => {
-      cratebox.cratebox.dispatch({
+      crate.dispatch({
         identifier: 'user',
         model: {
           name: 'Antonio',
@@ -217,12 +218,12 @@
     // DOM Event Listeners
     travelBackwards.addEventListener('click', (e) => {
       console.log(`Let's travel backwards in time !!`);
-      cratebox.cratebox.travelBackwards('user');
+      crate.travelBackwards('user');
     });
 
     travelForwards.addEventListener('click', (e) => {
       console.log(`Let's travel forwards in time !!`);
-      cratebox.cratebox.travelForwards('user');
+      crate.travelForwards('user');
     });
 
   </script>

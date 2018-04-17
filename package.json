@@ -6,24 +6,24 @@
   "scripts": {
     "start": "node core/index.js",
     "rollup": "rollup -c",
-    "tsc": "tsc",
-    "demo": "yarn tsc && yarn rollup && yarn cp-dist-demo && npx simplehttpserver ./demo",
+    "demo": "yarn prepare && yarn cp-dist-demo && npx simplehttpserver ./demo",
     "cp-dist-demo": "cpy dist/cratebox.umd.js demo",
-    "test": "yarn prepare && jest",
-    "prepare": "yarn tsc && yarn rollup"
+    "test": "ava --verbose",
+    "prepare": "yarn rollup && yarn test"
   },
   "devDependencies": {
-    "@types/jest": "^22.2.3",
+    "@babel/cli": "^7.0.0-beta.44",
+    "@babel/core": "^7.0.0-beta.44",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.44",
+    "@babel/preset-env": "^7.0.0-beta.44",
+    "ava": "1.0.0-beta.4",
     "cpy-cli": "^1.0.1",
-    "jest": "^22.4.3",
     "rollup": "^0.57.1",
-    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-babel": "^4.0.0-beta.4",
     "rollup-plugin-filesize": "^1.5.0",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-replace": "^2.0.0",
-    "rollup-plugin-uglify": "^3.0.0",
-    "tslib": "^1.9.0",
-    "typescript": "^2.8.1"
+    "rollup-plugin-uglify": "^3.0.0"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,5 @@
   },
   "keywords": ["state", "management"],
   "author": "Alex Casillas <https://alexvcasillas.com>",
-  "license": "MIT",
-  "dependencies": {}
+  "license": "MIT"
 }

@@ -8,26 +8,26 @@
 export const baseTypes = {
   string: {
     name: 'string',
-    checker: (v: string) => typeof v === 'string'
+    checker: v => typeof v === 'string'
   },
   number: {
     name: 'number',
-    checker: (v: number) => typeof v === 'number'
+    checker: v => typeof v === 'number'
   },
   boolean: {
     name: 'boolean',
-    checker: (v: boolean) => typeof v === 'boolean'
+    checker: v => typeof v === 'boolean'
   },
   null: {
     name: 'null',
-    checker: (v: null) => v === null
+    checker: v => v === null
   },
   undefined: {
     name: 'undefined',
-    checker: (v: undefined) => typeof v === 'undefined'
+    checker: v => typeof v === 'undefined'
   },
   date: {
     name: 'date',
-    checker: (v: Date) => v instanceof Date
+    checker: v => v instanceof Date
   }
 };
