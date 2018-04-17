@@ -1,3 +1,4 @@
+import test from 'ava';
 const { cratebox, types } = require('../dist/cratebox');
 
 const quickModel = {
@@ -9,19 +10,19 @@ const quickModel = {
   }
 };
 
-test('it should describe a store', () => {
+test('it should describe a store', t => {
   const crate = cratebox();
   crate.describeStore(quickModel);
-  expect(crate.getStoreDescription('user')).not.toBe(null);
-  expect(crate.getStoreDescriptions().size).toBe(1);
+  t.truthy(crate.getStoreDescription('user'));
+  t.is(crate.getStoreDescriptions().size, 1);
 });
 
-test('it tries to get the state without any previously dispatched changes', () => {
+test('it tries to get the state without any previously dispatched changes', t => {
   const crate = cratebox();
-  expect(crate.getState('user')).toBe(null);
+  t.is(crate.getState('user'), null);
 });
 
-test('it should dispatch a change to a store', () => {
+test('it should dispatch a change to a store', t => {
   const crate = cratebox();
   crate.describeStore(quickModel);
   crate.dispatch({
@@ -32,14 +33,14 @@ test('it should dispatch a change to a store', () => {
       age: 28
     }
   });
-  expect(crate.getState('user')).toEqual({
+  t.deepEqual(crate.getState('user'), {
     name: 'Alex',
     lastName: 'Casillas',
     age: 28
   });
 });
 
-test('it should dispatch a change to specific properties', () => {
+test('it should dispatch a change to specific properties', t => {
   const crate = cratebox();
   crate.describeStore(quickModel);
   crate.dispatch({
@@ -57,19 +58,19 @@ test('it should dispatch a change to specific properties', () => {
       lastName: 'Cobos'
     }
   });
-  expect(crate.getState('user')).toEqual({
+  t.deepEqual(crate.getState('user'), {
     name: 'Antonio',
     lastName: 'Cobos',
     age: 28
   });
 });
 
-test('it should get subscribed changes to the store', () => {
-  expect.assertions(1);
+test('it should get subscribed changes to the store', t => {
+  t.plan(1);
   const crate = cratebox();
   crate.describeStore(quickModel);
   crate.subscribe('user', model => {
-    expect(model).toEqual({
+    t.deepEqual(model, {
       name: 'Michel',
       lastName: 'Weststrate',
       age: 30
@@ -85,7 +86,7 @@ test('it should get subscribed changes to the store', () => {
   });
 });
 
-test('it should travel backwards in time', () => {
+test('it should travel backwards in time', t => {
   const crate = cratebox();
   crate.describeStore(quickModel);
   crate.dispatch({
@@ -105,14 +106,14 @@ test('it should travel backwards in time', () => {
     }
   });
   crate.travelBackwards('user');
-  expect(crate.getState('user')).toEqual({
+  t.deepEqual(crate.getState('user'), {
     name: 'Alex',
     lastName: 'Casillas',
     age: 28
   });
 });
 
-test('it should travel backwards and then forwards in time', () => {
+test('it should travel backwards and then forwards in time', t => {
   const crate = cratebox();
   crate.describeStore(quickModel);
   crate.dispatch({
@@ -133,7 +134,7 @@ test('it should travel backwards and then forwards in time', () => {
   });
   crate.travelBackwards('user');
   crate.travelForwards('user');
-  expect(crate.getState('user')).toEqual({
+  t.deepEqual(crate.getState('user'), {
     name: 'Antonio',
     lastName: 'Cobos',
     age: 33

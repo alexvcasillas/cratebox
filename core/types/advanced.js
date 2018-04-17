@@ -1,5 +1,3 @@
-import { baseType, arrayType } from './interfaces';
-export { baseType, arrayType };
 /**
  * Advanced Type System
  * Advanced Type System consists on objects that store will check against.
@@ -8,11 +6,11 @@ export { baseType, arrayType };
  *    checker: function that will make the type checking
  */
 export const advancedTypes = {
-  array: function(type: baseType): arrayType {
+  array: function(type) {
     return {
       name: 'array',
       type: type,
-      checker(v: any[]): boolean {
+      checker(v) {
         // Check if we have a defined type
         if (this.type === undefined) return false;
         // Check if it's an array

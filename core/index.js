@@ -21,18 +21,18 @@ const dispatchedModel = {
  */
 const cratebox = function() {
   // Map that contains all of the store definitions
-  const descriptions: Map<string, any> = new Map();
+  const descriptions = new Map();
   // Map that contains all of the store changes based on the store definitions
-  const state: Map<string, any> = new Map();
+  const state = new Map();
   // Map that contains all of the subscription listeners
-  const listeners: Map<string, any> = new Map();
+  const listeners = new Map();
 
   return {
     /**
      * This method describes a store based on a store model object.
      * @param {object} storeModel
      */
-    describeStore(storeModel: any) {
+    describeStore(storeModel) {
       // Check if we already have the given store described
       if (descriptions.has(storeModel.identifier)) {
         // If we do, then throw an error complaining about it :)
@@ -44,7 +44,7 @@ const cratebox = function() {
     /**
      * This method returns all of the store descriptions in the store.
      */
-    getStoreDescriptions(): Map<string, any> {
+    getStoreDescriptions() {
       return descriptions;
     },
     /**
@@ -52,7 +52,7 @@ const cratebox = function() {
      * the given description identifier.
      * @param {string} identifier
      */
-    getStoreDescription(identifier: any): any {
+    getStoreDescription(identifier) {
       // Check if we have definied that store description
       if (!descriptions.has(identifier)) {
         // If we don't, then throw an error complaining about it :)
@@ -64,14 +64,14 @@ const cratebox = function() {
     /**
      * This method returns the current state of the whole store object.
      */
-    getGlobalState(): Map<string, any> {
+    getGlobalState() {
       return state;
     },
     /**
      * This method returns the current state of an specified store
      * @param {string} identifier
      */
-    getState(identifier: any) {
+    getState(identifier) {
       if (state.get(identifier)) {
         const currentState = state.get(identifier).currentState;
         return state.get(identifier)._data.slice(currentState, currentState + 1)[0];
@@ -84,7 +84,7 @@ const cratebox = function() {
      * the given store action object.
      * @param {object} storeAction
      */
-    dispatch({ identifier, model }: any) {
+    dispatch({ identifier, model }) {
       // First we need to get the store descriptor
       const descriptor = this.getStoreDescription(identifier);
       // Then we need to iterate through all the properties of the model we want to dispatch
@@ -140,7 +140,7 @@ const cratebox = function() {
      * @param {string} store
      * @param {function} listener
      */
-    subscribe(store: string, listener: Function) {
+    subscribe(store, listener) {
       // Check if we have a defined store to attached the listener to
       if (typeof store === 'undefined') {
         // If we don't, then throw an error complaining about it :)
@@ -169,7 +169,7 @@ const cratebox = function() {
      * by the given identifier.
      * @param {string} identifier
      */
-    travelForwards(identifier: string) {
+    travelForwards(identifier) {
       // Get the state
       const storedState = state.get(identifier);
       // Obtain the nextStateIndex that is the current state + 1
@@ -197,7 +197,7 @@ const cratebox = function() {
      * by the given identifier.
      * @param {string} identifier
      */
-    travelBackwards(identifier: string) {
+    travelBackwards(identifier) {
       // Get the state
       const storedState = state.get(identifier);
       // Obtain the nextStateIndex that is the current state - 1
@@ -227,7 +227,7 @@ const cratebox = function() {
      * @param {string} identifier
      * @param {number} index
      */
-    travelTo(identifier: string, index: number) {}
+    travelTo(identifier, index) {}
   };
 };
 

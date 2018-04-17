@@ -1,37 +1,38 @@
+import test from 'ava';
 const { types } = require('../dist/cratebox');
 
-test('it should be of type string', () => {
-  expect(types.string.checker('string')).toBe(true);
+test('it should be of type string', t => {
+  t.true(types.string.checker('string'));
 });
 
-test('it should be of type number', () => {
-  expect(types.number.checker(1990)).toBe(true);
+test('it should be of type number', t => {
+  t.true(types.number.checker(1990));
 });
 
-test('it should be of type boolean', () => {
-  expect(types.boolean.checker(true)).toBe(true);
+test('it should be of type boolean', t => {
+  t.true(types.boolean.checker(true));
 });
 
-test('it should be of type null', () => {
-  expect(types.null.checker(null)).toBe(true);
+test('it should be of type null', t => {
+  t.true(types.null.checker(null));
 });
 
-test('it should be of type undefined', () => {
-  expect(types.undefined.checker(undefined)).toBe(true);
+test('it should be of type undefined', t => {
+  t.true(types.undefined.checker(undefined));
 });
 
-test('it should be of type date', () => {
-  expect(types.date.checker(new Date())).toBe(true);
+test('it should be of type date', t => {
+  t.true(types.date.checker(new Date()));
 });
 
-test('it should be of type array of strings', () => {
-  expect(types.array(types.string).checker(['hola', 'mundo'])).toBe(true);
+test('it should be of type array of strings', t => {
+  t.true(types.array(types.string).checker(['hola', 'mundo']));
 });
 
-test('it should be of type array of numbers', () => {
-  expect(types.array(types.number).checker([23, 3, 1990])).toBe(true);
+test('it should be of type array of numbers', t => {
+  t.true(types.array(types.number).checker([23, 3, 1990]));
 });
 
-test('it should be of type array of boolean', () => {
-  expect(true).toBe(true);
+test('it should be of type array of boolean', t => {
+  t.true(types.array(types.boolean).checker([true, false, true]));
 });
