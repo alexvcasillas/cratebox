@@ -1,3 +1,5 @@
+/* @flow */
+
 import { types } from './types';
 
 /**
