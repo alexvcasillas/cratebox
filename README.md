@@ -1,5 +1,7 @@
 # CrateBox
 
+[![CircleCI](https://circleci.com/gh/alexvcasillas/cratebox.svg?style=svg)](https://circleci.com/gh/alexvcasillas/cratebox)
+
 CrateBox is an Opinionated State Management library for no particular UI library.
 
 # Contents
