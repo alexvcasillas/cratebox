@@ -6,10 +6,9 @@
   "scripts": {
     "start": "node core/index.js",
     "rollup": "rollup -c",
-    "babel": "babel lib/ --out-dir dist",
-    "demo": "yarn tsc && yarn rollup && yarn cp-dist-demo && npx simplehttpserver ./demo",
+    "demo": "yarn prepare && yarn cp-dist-demo && npx simplehttpserver ./demo",
     "cp-dist-demo": "cpy dist/cratebox.umd.js demo",
-    "test": "yarn prepare && ava --verbose",
+    "test": "ava --verbose",
     "prepare": "yarn rollup && yarn test"
   },
   "devDependencies": {
