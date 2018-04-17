@@ -1,37 +1,30 @@
 const { cratebox, types } = require('../dist/cratebox');
 
-test('it should describe a store', () => {
-  cratebox.describeStore({
-    identifier: 'user',
-    model: {
-      name: types.string,
-      lastName: types.string,
-      age: types.number
-    }
-  });
-  expect(cratebox.descriptions.has('user')).toBe(true);
-});
+const quickModel = {
+  identifier: 'user',
+  model: {
+    name: types.string,
+    lastName: types.string,
+    age: types.number
+  }
+};
 
-test('it should describe another store', () => {
-  cratebox.describeStore({
-    identifier: 'posts',
-    model: {
-      title: types.string,
-      description: types.string,
-      author: types.string
-    }
-  });
-  expect(cratebox.descriptions.has('user')).toBe(true);
-  expect(cratebox.descriptions.has('posts')).toBe(true);
-  expect(cratebox.descriptions.size).toBe(2);
+test('it should describe a store', () => {
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  expect(crate.getStoreDescription('user')).not.toBe(null);
+  expect(crate.getStoreDescriptions().size).toBe(1);
 });
 
 test('it tries to get the state without any previously dispatched changes', () => {
-  expect(cratebox.getState('user')).toBe(null);
+  const crate = cratebox();
+  expect(crate.getState('user')).toBe(null);
 });
 
 test('it should dispatch a change to a store', () => {
-  cratebox.dispatch({
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  crate.dispatch({
     identifier: 'user',
     model: {
       name: 'Alex',
@@ -39,41 +32,110 @@ test('it should dispatch a change to a store', () => {
       age: 28
     }
   });
-  expect(cratebox.getState('user')).toEqual({ name: 'Alex', lastName: 'Casillas', age: 28 });
+  expect(crate.getState('user')).toEqual({
+    name: 'Alex',
+    lastName: 'Casillas',
+    age: 28
+  });
 });
 
 test('it should dispatch a change to specific properties', () => {
-  cratebox.dispatch({
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  crate.dispatch({
+    identifier: 'user',
+    model: {
+      name: 'Alex',
+      lastName: 'Casillas',
+      age: 28
+    }
+  });
+  crate.dispatch({
     identifier: 'user',
     model: {
       name: 'Antonio',
       lastName: 'Cobos'
     }
   });
-  expect(cratebox.getState('user')).toEqual({ name: 'Antonio', lastName: 'Cobos', age: 28 });
-});
-
-test('it should travel backwards in time', () => {
-  cratebox.travelBackwards('user');
-  expect(cratebox.getState('user')).toEqual({ name: 'Alex', lastName: 'Casillas', age: 28 });
-});
-
-test('it should travel forwards in time', () => {
-  cratebox.travelForwards('user');
-  expect(cratebox.getState('user')).toEqual({ name: 'Antonio', lastName: 'Cobos', age: 28 });
+  expect(crate.getState('user')).toEqual({
+    name: 'Antonio',
+    lastName: 'Cobos',
+    age: 28
+  });
 });
 
 test('it should get subscribed changes to the store', () => {
   expect.assertions(1);
-  cratebox.subscribe('user', model => {
-    expect(model).toEqual({ name: 'Michel', lastName: 'Weststrate', age: 30 });
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  crate.subscribe('user', model => {
+    expect(model).toEqual({
+      name: 'Michel',
+      lastName: 'Weststrate',
+      age: 30
+    });
   });
-  cratebox.dispatch({
+  crate.dispatch({
     identifier: 'user',
     model: {
       name: 'Michel',
       lastName: 'Weststrate',
       age: 30
     }
+  });
+});
+
+test('it should travel backwards in time', () => {
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  crate.dispatch({
+    identifier: 'user',
+    model: {
+      name: 'Alex',
+      lastName: 'Casillas',
+      age: 28
+    }
+  });
+  crate.dispatch({
+    identifier: 'user',
+    model: {
+      name: 'Antonio',
+      lastName: 'Cobos',
+      age: 33
+    }
+  });
+  crate.travelBackwards('user');
+  expect(crate.getState('user')).toEqual({
+    name: 'Alex',
+    lastName: 'Casillas',
+    age: 28
+  });
+});
+
+test('it should travel backwards and then forwards in time', () => {
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  crate.dispatch({
+    identifier: 'user',
+    model: {
+      name: 'Alex',
+      lastName: 'Casillas',
+      age: 28
+    }
+  });
+  crate.dispatch({
+    identifier: 'user',
+    model: {
+      name: 'Antonio',
+      lastName: 'Cobos',
+      age: 33
+    }
+  });
+  crate.travelBackwards('user');
+  crate.travelForwards('user');
+  expect(crate.getState('user')).toEqual({
+    name: 'Antonio',
+    lastName: 'Cobos',
+    age: 33
   });
 });
