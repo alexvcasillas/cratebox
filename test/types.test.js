@@ -36,3 +36,34 @@ test('it should be of type array of numbers', t => {
 test('it should be of type array of boolean', t => {
   t.true(types.array(types.boolean).checker([true, false, true]));
 });
+
+test('it should not allow to set an array type without a base type', t => {
+  const error = t.throws(() => types.array(), TypeError);
+  t.is(error.message, `Array type must be declared with a base type as it's argument`);
+});
+
+test('it should not allow to set an array type without a valid base type', t => {
+  const error = t.throws(() => types.array({ will: 'fail' }), TypeError);
+  t.is(error.message, `The declared type of the array is not a valid base type`);
+});
+
+test('it should be of type enumeration', t => {
+  t.true(types.enum(['ONE', 'TWO', 'THREE', 'FOUR']).checker('TWO'));
+});
+
+test('it should not allow to set an invalid enumeration type', t => {
+  t.false(types.enum(['ONE', 'TWO', 'THREE', 'FOUR']).checker(20));
+});
+
+test('it should not allow to set an enumeration type without any enumeration', t => {
+  const error = t.throws(() => types.enum(), Error);
+  t.is(
+    error.message,
+    `Enumeration type must be declared with an array of strings as it's argument with at least one value`,
+  );
+});
+
+test('it should explode when trying to set a not valid enumeration type', t => {
+  const error = t.throws(() => types.enum(['ONE', 2, 'THREE', 'FOUR']), TypeError);
+  t.is(error.message, `Enumeration type must be an array of string literals`);
+});

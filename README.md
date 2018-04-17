@@ -377,7 +377,7 @@ The advanced types of **CrateBox** are currently a work in progress but will con
 
 ### types.array(type: base)
 
-The array type recieves a basic type as a single parámeter and will make sure that all of the values stored at the array are solely that type.
+The array type recieves a basic type as a single parameter and will make sure that all of the values stored at the array are solely that type.
 
 For example:
 
@@ -394,12 +394,29 @@ myCratebox.describeStore({
 
 If you try to include any type different from the base string type it will complain and throw an error.
 
+### types.enum(enumeration: string[])
+
+The enumeration type recieves an array of literal strings as a single parameter and will make sure that the value that is trying to be store is one of the described in the enumeration.
+
+For example
+
+```
+myCratebox.describeStore({
+  identifier: 'notes',
+  model: {
+    title: types.string,
+    description: types.string
+    status: types.enum(['DRAFT', 'PUBLISHED', 'HIDDEN'])
+  }
+});
+```
+
+If you try to include anything that is not one of the described string literals it will complain and throw an error.
+
 Some of the types that are pending to implement but are in the roadmap are:
 
-* types.array(type: base)
 * types.frozen
 * types.literal
-* types.enumeration
 
 # Roadmap
 
@@ -407,10 +424,8 @@ We have a roadmap for new implementations and this are our intentions:
 
 * Specific State Time Traveling via `travelTo(index: number)` exposed API method.
 * Advanced types in the following order:
-  1.  types.array
-  2.  types.frozen
-  3.  types.literal
-  4.  types.enumeration
+  1.  types.frozen
+  2.  types.literal
 * Lifecycle hooks
   * Before Create via `beforeCreate` model property.
   * After Create via `afterCreate` model property.
