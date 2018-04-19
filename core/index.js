@@ -12,7 +12,7 @@ import { types } from './types';
  * complaining about mutating directly the properties.
  */
 const dispatchedModel = {
-  _isDispatched: true
+  _isDispatched: true,
 };
 
 /**
@@ -95,9 +95,9 @@ const cratebox = function() {
         if (!descriptor[key].checker(model[key])) {
           // If it's not a valid type, then throw an error complaining about it :)
           throw new Error(
-            `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a "${
+            `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a/an "${
               descriptor[key].name
-            }"`
+            }"`,
           );
         }
       });
@@ -229,7 +229,7 @@ const cratebox = function() {
      * @param {string} identifier
      * @param {number} index
      */
-    travelTo(identifier, index) {}
+    travelTo(identifier, index) {},
   };
 };
 
