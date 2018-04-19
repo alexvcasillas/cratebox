@@ -1,4 +1,4 @@
-# CrateBox
+# 📦 CrateBox
 
 [![CircleCI](https://circleci.com/gh/alexvcasillas/cratebox.svg?style=svg)](https://circleci.com/gh/alexvcasillas/cratebox) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![first-timers-only](http://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square)](http://www.firsttimersonly.com/)
 
