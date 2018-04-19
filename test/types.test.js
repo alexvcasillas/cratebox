@@ -56,7 +56,7 @@ test('it should not allow to set an invalid enumeration type', t => {
 });
 
 test('it should not allow to set an enumeration type without any enumeration', t => {
-  const error = t.throws(() => types.enum(), Error);
+  const error = t.throws(() => types.enum(), TypeError);
   t.is(
     error.message,
     `Enumeration type must be declared with an array of strings as it's argument with at least one value`,
@@ -66,4 +66,8 @@ test('it should not allow to set an enumeration type without any enumeration', t
 test('it should explode when trying to set a not valid enumeration type', t => {
   const error = t.throws(() => types.enum(['ONE', 2, 'THREE', 'FOUR']), TypeError);
   t.is(error.message, `Enumeration type must be an array of string literals`);
+});
+
+test('it should be of type literal', t => {
+  t.true(types.literal('CRATEBOX').checker('CRATEBOX'));
 });
