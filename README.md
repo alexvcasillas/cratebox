@@ -16,6 +16,8 @@ CrateBox is an Opinionated State Management library for no particular UI library
 * [Types](#types)
   * [Basic Types](#basic-types)
   * [Advanced Types](#advanced-types)
+* [Implementations](#implementations)
+  * [React](#react)
 * [Roadmap](#roadmap)
 * [Thanks!](#thanks)
 
@@ -417,6 +419,14 @@ Some of the types that are pending to implement but are in the roadmap are:
 
 * types.frozen
 * types.literal
+
+# Implementations
+
+Currently Cratebox has a React implementation.
+
+## React
+
+To make use of Cratebox with React, go to the official [Cratebox React](https://github.com/alexvcasillas/cratebox-react) bindings.
 
 # Roadmap
 
