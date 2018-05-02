@@ -415,10 +415,28 @@ myCratebox.describeStore({
 
 If you try to include anything that is not one of the described string literals it will complain and throw an error.
 
+## types.literal(literal: string)
+
+The literal type recieves a string literal to check against.
+
+For example
+
+```
+myCratebox.describeStore({
+  identifier: 'notes',
+  model: {
+    title: types.string,
+    description: types.string
+    status: types.enum(['DRAFT', 'PUBLISHED', 'HIDDEN']),
+    fixed: types.literal('IMMUTABLE')
+  }
+});
+```
+If you try to set the property `fixed` to another value that's not IMMUTABLE, in this example, it will complain and throw an error.
+
 Some of the types that are pending to implement but are in the roadmap are:
 
 * types.frozen
-* types.literal
 
 # Implementations
 
