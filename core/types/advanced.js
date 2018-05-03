@@ -15,6 +15,16 @@ function checkTypeChecker(type) {
 }
 
 /**
+ * This function checks if the provided value is a plain object
+ * @param {object} value 
+ */
+function isPlainObject(value) {
+  if (value === null || typeof value !== "object") return false
+  const proto = Object.getPrototypeOf(value)
+  return proto === Object.prototype || proto === null
+}
+
+/**
  * Advanced Type System
  * Consists on objects that store will check against.
  */
@@ -30,7 +40,7 @@ export const advancedTypes = {
    * elements within the array to make sure that all of them are of the same type
    * as the declared array.
    */
-  array: function(type) {
+  array: function (type) {
     if (isUndefined(type)) {
       throw new TypeError(`Array type must be declared with a base type as it's argument`);
     }
@@ -65,7 +75,7 @@ export const advancedTypes = {
    * Behaviour:
    * Enum type should only contain one of the described literals
    */
-  enum: function(enumeration) {
+  enum: function (enumeration) {
     if (isUndefined(enumeration) || !Array.isArray(enumeration) || enumeration.length === 0) {
       throw new TypeError(
         `Enumeration type must be declared with an array of strings as it's argument with at least one value`,
@@ -88,12 +98,12 @@ export const advancedTypes = {
    * Literal Type
    * The Literal type has the following properties:
    *    name: name of the type for error feedback
-   *    checker: function to check types agains
-   *    literal: the literal to check agains
+   *    checker: function to check types against
+   *    literal: the literal to check against
    * Behaviour:
    * Literal type should only contain the described string literal
    */
-  literal: function(literal) {
+  literal: function (literal) {
     if (isUndefined(literal) || typeof literal !== 'string') {
       throw new TypeError(`Literal type must be declared with a string literal to check against`);
     }
@@ -109,11 +119,11 @@ export const advancedTypes = {
    * Optional Type
    * The Optional type has the following properties:
    *    name: name of the type for error feedback
-   *    checker: function to check types agains
+   *    checker: function to check types against
    *    type: base type for this optional type
    *    defaultValue: the default value in case a value is not provided
    */
-  optional: function(type, defaultValue) {
+  optional: function (type, defaultValue) {
     if (isUndefined(type) || isUndefined(defaultValue)) {
       throw new TypeError(`Optional type must be declared with a type plus a default value for that type`);
     }
@@ -127,4 +137,21 @@ export const advancedTypes = {
       },
     };
   },
+  /**
+   * Frozen Type
+   * The Frozen type has the following properties
+   *    name: name of the type for error feedback
+   *    checker: function to check types against.
+   */
+  frozen: function (obj) {
+    if (isUndefined(obj) || !isPlainObject(obj)) {
+      throw new TypeError(`Frozen type must be declared with and object literal`);
+    }
+    return {
+      name: 'frozen',
+      checker(v) {
+        return isPlainObject(v);
+      }
+    }
+  }
 };

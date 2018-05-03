@@ -71,3 +71,22 @@ test('it should explode when trying to set a not valid enumeration type', t => {
 test('it should be of type literal', t => {
   t.true(types.literal('CRATEBOX').checker('CRATEBOX'));
 });
+
+test('it should be of type frozen', t => {
+  t.true(types.frozen({ name: 'Alex', lastName: 'Casillas' }).checker({ name: 'Alex', lastName: 'Casillas' }));
+})
+
+test('it should fail when checking an invalid frozen type', t => {
+  t.false(types.frozen({ name: 'Alex', lastName: 'Casillas' }).checker(['Not an object']));
+});
+
+test('it should not allow to set an invalid frozen type', t => {
+  const error = t.throws(() => types.frozen(), TypeError);
+  t.is(
+    error.message,
+    `Frozen type must be declared with and object literal`,
+  );
+  const second_error = t.throws(() => types.frozen(['Not an object']), TypeError);
+  t.is(second_error.message,
+    `Frozen type must be declared with and object literal`);
+});

@@ -2,10 +2,12 @@
 
 [![CircleCI](https://circleci.com/gh/alexvcasillas/cratebox.svg?style=svg)](https://circleci.com/gh/alexvcasillas/cratebox) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![first-timers-only](http://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square)](http://www.firsttimersonly.com/)
 
-CrateBox is an Opinionated State Management library for no particular UI library.
+**Cratebox** is an Opinionated State Management library for no particular UI library.
 
 # Contents
 
+* [Motivation](#motivation)
+* [Why Cratebox?](#why-cratebox)
 * [Installation](#installation)
 * [Getting Started](#getting-started)
 * [Describing a Store](#describing-a-store)
@@ -20,6 +22,14 @@ CrateBox is an Opinionated State Management library for no particular UI library
   * [React](#react)
 * [Roadmap](#roadmap)
 * [Thanks!](#thanks)
+
+# Motivation
+
+I started working on **Cratebox** to prove myself I was able to build a powerful state management library following the example of top notch developers like _Michel Weststrate_, _Dan Abramov_, _Jamie_ and many more. I wanted something robust and typed like _MobX State Tree_ but also wanted something clear and easy to use, and that's why I built **Cratebox**,  to be an intermediate point between _MobX State Tree_ and _Redux_, robust and with a declarative and simple API that does the job always.
+
+# Why Cratebox?
+
+This is a question that often comes to my mind. Why you should use **Cratebox**?. The answer could be: because you might like it. Or because you find an opinionated library interesting so you don't have to overwhelm yourself with decisions. Maybe it's because you like this simple API that it has. Using **Cratebox** is up to you. I've been working with _Redux_ and _MobX State Tree_ for a very long time and I believe **Cratebox** is right in between of this to impressive libraries and will get things done if you give it a try, for sure!
 
 # Installation
 
@@ -37,7 +47,7 @@ yarn add cratebox
 
 # Getting Started
 
-To get started with **CrateBox** first of all you need to import the dependency into your project plus the typings dependency for your models.
+To get started with **Cratebox** first of all you need to import the dependency into your project plus the typings dependency for your models.
 
 ```
 import { cratebox, types } from 'cratebox`
@@ -45,7 +55,7 @@ import { cratebox, types } from 'cratebox`
 const myCratebox = cratebox();
 ```
 
-From that point on, you'll have access to the full API of **CrateBox**.
+From that point on, you'll have access to the full API of **Cratebox**.
 
 # Describing a Store
 
@@ -66,7 +76,7 @@ myCratebox.describeStore({
 
 Let's take a look at the example above and let's get though all of the details.
 
-First of all we have the `describeStore` function. This function is the one in charge to tell **CrateBox** that we would like to describe a new store were we will put our state.
+First of all we have the `describeStore` function. This function is the one in charge to tell **Cratebox** that we would like to describe a new store were we will put our state.
 
 The `describeStore` function takes on parameter that is an object will the following structure:
 
@@ -77,7 +87,7 @@ The `describeStore` function takes on parameter that is an object will the follo
 }
 ```
 
-The `identifier` property represents the name of the store you're describing, therefore, this will be the name you'll be using latter on to deal with this particular store within **CrateBox**.
+The `identifier` property represents the name of the store you're describing, therefore, this will be the name you'll be using latter on to deal with this particular store within **Cratebox**.
 
 The `model` property is a `model object` that represents all of the properties that you're identified store will contain. This properties could be any of the properties that we will describe later on. This properties are typed by our own typing system and will let you build rock-solid-typed models.
 
@@ -97,11 +107,11 @@ Many of the properties described above are of type `string`, meaning that no mat
 
 There's also a type `number` and a type `date` there, meaning that, the property `age` will only be able to store numeric data and the `birthDate` property will only be able to store instances of the `Date` type.
 
-Ok, we've described our store so far at this point. Let's proceed with more stuff about **CrateBox**.
+Ok, we've described our store so far at this point. Let's proceed with more stuff about **Cratebox**.
 
 # Dispatching changes
 
-To dispatch a change into a store, we will call the `dispatch` function from the **CrateBox** API.
+To dispatch a change into a store, we will call the `dispatch` function from the **Cratebox** API.
 
 ```
 myCratebox.dispatch({
@@ -131,7 +141,7 @@ The `dispatch` function takes on single argument that is a `dispatch object`. Th
 
 See some resemblance from something we described before? That's it! It has the same structure that our `described store`! That makes things even more easy to deal with.
 
-The `identifier` property will tell **CrateBox** which of the `described stores` is the one that's getting a change. In the example above, `user` store is the one that's getting a change dispatched.
+The `identifier` property will tell **Cratebox** which of the `described stores` is the one that's getting a change. In the example above, `user` store is the one that's getting a change dispatched.
 
 We can dispatch as many changes to a store as we want. You have to consider that you dispatch changes to a model, meaning that, calling the `dispatch` event with the following data:
 
@@ -358,13 +368,13 @@ If you have noticed, the same `subscription` you've created for listening to cha
 
 # Types
 
-**CrateBox** is a typed state management library and therefore, comes bundled with basic types plus some advanced types.
+**Cratebox** is a typed state management library and therefore, comes bundled with basic types plus some advanced types.
 
 All of the types are to be imported from the `types` namespace.
 
 ## Basic Types
 
-The basic types of **CrateBox** are the following and self explanatory
+The basic types of **Cratebox** are the following and self explanatory
 
 * types.string
 * types.number
@@ -375,7 +385,7 @@ The basic types of **CrateBox** are the following and self explanatory
 
 ## Advanced Types
 
-The advanced types of **CrateBox** are currently a work in progress but will contain some of the following types for your use:
+The advanced types of **Cratebox** are currently a work in progress but will contain some of the following types for your use:
 
 ### types.array(type: base)
 
