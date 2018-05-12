@@ -25,7 +25,7 @@
 
 # Motivation
 
-I started working on **Cratebox** to prove myself I was able to build a powerful state management library following the example of top notch developers like _Michel Weststrate_, _Dan Abramov_, _Jamie_ and many more. I wanted something robust and typed like _MobX State Tree_ but also wanted something clear and easy to use, and that's why I built **Cratebox**,  to be an intermediate point between _MobX State Tree_ and _Redux_, robust and with a declarative and simple API that does the job always.
+I started working on **Cratebox** to prove myself I was able to build a powerful state management library following the example of top notch developers like _Michel Weststrate_, _Dan Abramov_, _Jamie_ and many more. I wanted something robust and typed like _MobX State Tree_ but also wanted something clear and easy to use, and that's why I built **Cratebox**, to be an intermediate point between _MobX State Tree_ and _Redux_, robust and with a declarative and simple API that does the job always.
 
 # Why Cratebox?
 
@@ -442,11 +442,36 @@ myCratebox.describeStore({
   }
 });
 ```
+
 If you try to set the property `fixed` to another value that's not IMMUTABLE, in this example, it will complain and throw an error.
 
-Some of the types that are pending to implement but are in the roadmap are:
+## types.frozen(frozen: object)
 
-* types.frozen
+The frozen type receives an object with any properties that you want.
+
+```
+myCratebox.describeStore({
+  identifier: 'notes',
+  model: {
+    title: types.string,
+    description: types.string
+    status: types.enum(['DRAFT', 'PUBLISHED', 'HIDDEN']),
+    fixed: types.literal('IMMUTABLE'),
+    custom: types.frozen
+  }
+});
+
+myCratebox.dispatch({
+  identifier: 'notes',
+  model: {
+    custom: {
+      hasReferences: true,
+      shareButtons: true,
+      allowComments: false
+    }
+  }
+})
+```
 
 # Implementations
 
