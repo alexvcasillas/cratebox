@@ -1,19 +1,5 @@
-/* @flow */
-
 import { types } from './types';
-
-/**
- * Dispatched Model Object
- * This is the base object for a state change dispatched
- * via store's dispatch method.
- * If we're trying to change a property directly instead
- * of using store's dispatch method, it won't have the
- * _isDispatched property so we should throw an error
- * complaining about mutating directly the properties.
- */
-const dispatchedModel = {
-  _isDispatched: true,
-};
+import { crateModel } from './models';
 
 /**
  * Store System
@@ -91,6 +77,12 @@ const cratebox = function() {
       const descriptor = this.getStoreDescription(identifier);
       // Then we need to iterate through all the properties of the model we want to dispatch
       Object.keys(model).forEach(key => {
+        // Check if it's a property valid for this descriptor
+        if (!descriptor.hasOwnProperty(key)) {
+          // If not, delete it
+          delete model[key];
+          return;
+        }
         // Typecheck agains the descriptor type-checker :)
         if (!descriptor[key].checker(model[key])) {
           // If it's not a valid type, then throw an error complaining about it :)
@@ -114,19 +106,21 @@ const cratebox = function() {
          * new model data, so we respect the properties that where missing
          * from a new state change.
          */
-        nextStateObject = Object.assign({}, previousState._data.slice(-1)[0], model);
+        const { model: safeModel } = crateModel({ ...previousState._data.slice(-1)[0], ...model }); // Safe cratebox model
+        nextStateObject = safeModel; //Object.assign(crateModel({}), previousState._data.slice(-1)[0], safeModel);
         nextState = [...previousState._data, nextStateObject];
       } else {
         /**
          * If we don't have a previous state, just set the nextState
          * as a new array holding the new dispatched data model within it
          */
-        nextState = [model];
+        const { model: safeModel } = crateModel(model); // Safe cratebox model
+        nextState = [safeModel];
         // If it's our first state, we should return the nextStateObject as the received model
-        nextStateObject = model;
+        nextStateObject = safeModel;
       }
       const currentState = nextState.length - 1; // Declare the current state index of the store to time travel
-      state.set(identifier, { ...dispatchedModel, currentState: currentState, _data: nextState });
+      state.set(identifier, { currentState: currentState, _data: nextState });
       // Check if we have a listener subscribing to this store
       if (listeners.has(identifier)) {
         // If we do, then we should call the listener :)
