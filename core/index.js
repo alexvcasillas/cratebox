@@ -21,10 +21,26 @@ const cratebox = function() {
      * @param {object} storeModel
      */
     describeStore(storeModel) {
+      // Check for store model object
+      if (typeof storeModel === 'undefined') {
+        throw new Error(
+          `You can't define a store without a store model object`
+        );
+      }
+      // Check for the identifier
+      if (!storeModel.hasOwnProperty('identifier')) {
+        throw new Error(`You can't describe a store without an identifier`);
+      }
+      // Check for the model
+      if (!storeModel.hasOwnProperty('model')) {
+        throw new Error(`You can't describe a store without a model`);
+      }
       // Check if we already have the given store described
       if (descriptions.has(storeModel.identifier)) {
         // If we do, then throw an error complaining about it :)
-        throw new Error(`You can't describe a new store with the same identifier as a previously described one.`);
+        throw new Error(
+          `You can't describe a new store with the same identifier as a previously described one.`
+        );
       }
       // If not, then we will set a new description based on the identifier and the model
       descriptions.set(storeModel.identifier, { ...storeModel.model });
@@ -44,7 +60,9 @@ const cratebox = function() {
       // Check if we have definied that store description
       if (!descriptions.has(identifier)) {
         // If we don't, then throw an error complaining about it :)
-        throw new Error(`You're trying to get a store description that doesn't exists.`);
+        throw new Error(
+          `You're trying to get a store description that doesn't exists.`
+        );
       }
       // If we do, then get the descriptor of the store based on the given identifier
       return descriptions.get(identifier);
@@ -62,7 +80,9 @@ const cratebox = function() {
     getState(identifier) {
       if (state.get(identifier)) {
         const currentState = state.get(identifier).currentState;
-        return state.get(identifier)._data.slice(currentState, currentState + 1)[0];
+        return state
+          .get(identifier)
+          ._data.slice(currentState, currentState + 1)[0];
       } else {
         return null;
       }
@@ -72,7 +92,23 @@ const cratebox = function() {
      * the given store action object.
      * @param {object} storeAction
      */
-    dispatch({ identifier, model }) {
+    dispatch(dispatchObject) {
+      if (typeof dispatchObject === 'undefined') {
+        throw new Error(
+          `You can't dispatch changes without a dispatch object: { identifier: string, model: object }`
+        );
+      }
+      const { identifier, model } = dispatchObject;
+      // Check for identifier
+      if (!identifier) {
+        throw new Error(`You need a store identifier to dispatch changes to`);
+      }
+      // Check for the model
+      if (!model) {
+        throw new Error(
+          `You need a model with the changes you would like to apply`
+        );
+      }
       // First we need to get the store descriptor
       const descriptor = this.getStoreDescription(identifier);
       // Then we need to iterate through all the properties of the model we want to dispatch
@@ -87,9 +123,11 @@ const cratebox = function() {
         if (!descriptor[key].checker(model[key])) {
           // If it's not a valid type, then throw an error complaining about it :)
           throw new Error(
-            `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a/an "${
+            `Type "${typeof model[
+              key
+            ]}" cannot be setted to the property ${key} described as a/an "${
               descriptor[key].name
-            }"`,
+            }"`
           );
         }
       });
@@ -106,7 +144,10 @@ const cratebox = function() {
          * new model data, so we respect the properties that where missing
          * from a new state change.
          */
-        const { model: safeModel } = crateModel({ ...previousState._data.slice(-1)[0], ...model }); // Safe cratebox model
+        const { model: safeModel } = crateModel({
+          ...previousState._data.slice(-1)[0],
+          ...model
+        }); // Safe cratebox model
         nextStateObject = safeModel; //Object.assign(crateModel({}), previousState._data.slice(-1)[0], safeModel);
         nextState = [...previousState._data, nextStateObject];
       } else {
@@ -140,7 +181,9 @@ const cratebox = function() {
       // Check if we have a defined store to attached the listener to
       if (typeof store === 'undefined') {
         // If we don't, then throw an error complaining about it :)
-        throw new Error(`The subscription method needs a store to subscribe to`);
+        throw new Error(
+          `The subscription method needs a store to subscribe to`
+        );
       }
       // Check if we have a defined function for the listener callback
       if (typeof listener !== 'function') {
@@ -150,12 +193,16 @@ const cratebox = function() {
       // Check if we're trying to set a listener for a non-existent store
       if (!descriptions.has(store)) {
         // If we do, then throw an error complaining about it :)
-        throw new Error(`You're tyring to subscribe changes for a non-existent store.`);
+        throw new Error(
+          `You're tyring to subscribe changes for a non-existent store.`
+        );
       }
       // Check if we already have a listener defined for this store
       if (listeners.has(store)) {
         // If we do, then throw an error complaining about it :)
-        throw new Error(`You're trying to set a listener to a store that already has a listener attached to it.`);
+        throw new Error(
+          `You're trying to set a listener to a store that already has a listener attached to it.`
+        );
       }
       // Add the listener to the store
       listeners.set(store, listener);
@@ -204,7 +251,10 @@ const cratebox = function() {
         //console.warn(`You can't keep traveling backwards within this store`);
       } else {
         // Set the Current State to the next state index
-        state.set(identifier, { ...storedState, currentState: previousStateIndex });
+        state.set(identifier, {
+          ...storedState,
+          currentState: previousStateIndex
+        });
         // Then call the subscribed listener of the store with the current state :)
         // Check if we have a listener subscribing to this store
         if (listeners.has(identifier)) {
@@ -223,7 +273,7 @@ const cratebox = function() {
      * @param {string} identifier
      * @param {number} index
      */
-    travelTo(identifier, index) {},
+    travelTo(identifier, index) {}
   };
 };
 

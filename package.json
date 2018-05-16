@@ -1,6 +1,6 @@
 {
   "name": "cratebox",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "State Management Library",
   "main": "dist/cratebox.js",
   "scripts": {
