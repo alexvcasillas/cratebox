@@ -6,11 +6,11 @@
   "scripts": {
     "start": "node core/index.js",
     "rollup": "rollup -c",
+    "compile": "tsc",
     "demo": "yarn prepare && yarn cp-dist-demo && npx simplehttpserver ./demo",
     "cp-dist-demo": "cpy dist/cratebox.umd.js demo",
     "test": "ava --verbose",
-    "prepare": "yarn rollup && yarn test",
-    "ts": "tsc"
+    "prepare": "yarn compile && yarn rollup && yarn test"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.44",
