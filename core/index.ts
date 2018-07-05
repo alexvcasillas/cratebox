@@ -87,7 +87,7 @@ const cratebox = function() {
      * the given store action object.
      * @param {Model} dispatchObject
      */
-    dispatch(dispatchObject: Model) {
+    dispatch(dispatchObject: StoreModel) {
       if (typeof dispatchObject === "undefined") {
         throw new Error(`You can't dispatch changes without a dispatch object: { identifier: string, model: object }`);
       }
