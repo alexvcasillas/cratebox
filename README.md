@@ -6,22 +6,22 @@
 
 # Contents
 
-* [Motivation](#motivation)
-* [Why Cratebox?](#why-cratebox)
-* [Installation](#installation)
-* [Getting Started](#getting-started)
-* [Describing a Store](#describing-a-store)
-* [Dispatching Changes](#dispatching-changes)
-* [Retrieving State](#retrieving-state)
-* [Subscriptions](#subscriptions)
-* [Time Traveling](#time-traveling)
-* [Types](#types)
-  * [Basic Types](#basic-types)
-  * [Advanced Types](#advanced-types)
-* [Implementations](#implementations)
-  * [React](#react)
-* [Roadmap](#roadmap)
-* [Thanks!](#thanks)
+- [Motivation](#motivation)
+- [Why Cratebox?](#why-cratebox)
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+- [Describing a Store](#describing-a-store)
+- [Dispatching Changes](#dispatching-changes)
+- [Retrieving State](#retrieving-state)
+- [Subscriptions](#subscriptions)
+- [Time Traveling](#time-traveling)
+- [Types](#types)
+  - [Basic Types](#basic-types)
+  - [Advanced Types](#advanced-types)
+- [Implementations](#implementations)
+  - [React](#react)
+- [Roadmap](#roadmap)
+- [Thanks!](#thanks)
 
 # Motivation
 
@@ -376,12 +376,12 @@ All of the types are to be imported from the `types` namespace.
 
 The basic types of **Cratebox** are the following and self explanatory
 
-* types.string
-* types.number
-* types.boolean
-* types.null
-* types.undefined
-* types.date
+- types.string
+- types.number
+- types.boolean
+- types.null
+- types.undefined
+- types.date
 
 ## Advanced Types
 
@@ -425,7 +425,7 @@ myCratebox.describeStore({
 
 If you try to include anything that is not one of the described string literals it will complain and throw an error.
 
-## types.literal(literal: string)
+### types.literal(literal: string)
 
 The literal type recieves a string literal to check against.
 
@@ -445,7 +445,7 @@ myCratebox.describeStore({
 
 If you try to set the property `fixed` to another value that's not IMMUTABLE, in this example, it will complain and throw an error.
 
-## types.frozen(frozen: object)
+### types.frozen(frozen: object)
 
 The frozen type receives an object with any properties that you want.
 
@@ -485,13 +485,12 @@ To make use of Cratebox with React, go to the official [Cratebox React](https://
 
 We have a roadmap for new implementations and this are our intentions:
 
-* Specific State Time Traveling via `travelTo(index: number)` exposed API method.
-* Advanced types in the following order:
-  1.  types.frozen
-  2.  types.literal
-* Lifecycle hooks
-  * Before Create via `beforeCreate` model property.
-  * After Create via `afterCreate` model property.
+- Specific State Time Traveling via `travelTo(index: number)` exposed API method.
+- Advanced Types
+  - Optional Type
+- Lifecycle hooks
+  - Before Create via `beforeCreate` model property.
+  - After Create via `afterCreate` model property.
 
 # Thanks!
 

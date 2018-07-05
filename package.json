@@ -1,15 +1,20 @@
 {
   "name": "cratebox",
-  "version": "0.5.1",
+  "version": "0.6.4",
   "description": "State Management Library",
   "main": "dist/cratebox.js",
+  "umd:main": "dist/cratebox.umd.js",
+  "module": "dist/cratebox.module.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "start": "node core/index.js",
     "rollup": "rollup -c",
+    "compile": "tsc",
     "demo": "yarn prepare && yarn cp-dist-demo && npx simplehttpserver ./demo",
+    "cp-td": "cpr lib dist --delete-first --filter=\\\\.js",
     "cp-dist-demo": "cpy dist/cratebox.umd.js demo",
     "test": "ava --verbose",
-    "prepare": "yarn rollup && yarn test"
+    "prepare": "yarn compile && yarn cp-td && yarn rollup && yarn test"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.44",
@@ -17,19 +22,25 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.44",
     "@babel/preset-env": "^7.0.0-beta.44",
     "ava": "1.0.0-beta.4",
-    "cpy-cli": "^1.0.1",
-    "rollup": "^0.57.1",
+    "cpr": "^3.0.1",
+    "cpy-cli": "^2.0.0",
+    "rollup": "^0.62.0",
     "rollup-plugin-babel": "^4.0.0-beta.4",
-    "rollup-plugin-filesize": "^1.5.0",
+    "rollup-plugin-filesize": "^2.0.0",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-replace": "^2.0.0",
-    "rollup-plugin-uglify": "^3.0.0"
+    "rollup-plugin-uglify": "^4.0.0",
+    "tslint": "^5.10.0",
+    "typescript": "^2.9.2"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alexvcasillas/cratebox.git"
   },
-  "keywords": ["state", "management"],
+  "keywords": [
+    "state",
+    "management"
+  ],
   "author": "Alex Casillas <https://alexvcasillas.com>",
   "license": "MIT"
 }

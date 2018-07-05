@@ -1,32 +1,31 @@
-import resolve from 'rollup-plugin-node-resolve';
-import filesize from 'rollup-plugin-filesize';
-import uglify from 'rollup-plugin-uglify';
-import babel from 'rollup-plugin-babel';
+import resolve from "rollup-plugin-node-resolve";
+import filesize from "rollup-plugin-filesize";
+import { uglify } from "rollup-plugin-uglify";
 
 export default [
   {
-    input: './core/index.js',
+    input: "./lib/index.js",
     output: {
-      file: './dist/cratebox.js',
-      format: 'cjs',
+      file: "./dist/cratebox.js",
+      format: "cjs",
     },
-    plugins: [resolve(), babel(), uglify(), filesize()],
+    plugins: [resolve(), filesize()],
   },
   {
-    input: './core/index.js',
+    input: "./lib/index.js",
     output: {
-      file: './dist/cratebox.umd.js',
-      format: 'umd',
-      name: 'cratebox',
+      file: "./dist/cratebox.umd.js",
+      format: "umd",
+      name: "cratebox",
     },
-    plugins: [resolve(), babel(), uglify(), filesize()],
+    plugins: [resolve(), uglify(), filesize()],
   },
   {
-    input: './core/index.js',
+    input: "./lib/index.js",
     output: {
-      file: './dist/cratebox.module.js',
-      format: 'es',
+      file: "./dist/cratebox.module.js",
+      format: "es",
     },
-    plugins: [resolve(), babel(), uglify(), filesize()],
+    plugins: [resolve(), filesize()],
   },
 ];
