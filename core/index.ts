@@ -14,7 +14,7 @@ const cratebox = function() {
   // Map that contains all of the store changes based on the store definitions
   const state: Map<string, Model> = new Map();
   // Map that contains all of the subscription listeners
-  const listeners: Map<string, Function> = new Map();
+  const listeners: Map<string, Array<Function>> = new Map();
 
   return {
     /**
@@ -123,7 +123,7 @@ const cratebox = function() {
       // If all of the keys pass the type-checking then we proceed to set it into the store
       const previousState = state.get(identifier); // Get the previous state of the store
       let nextState; // Declare the next state where we will set the new state
-      let nextStateObject; // Declare the next state object that will be set in the new state
+      let nextStateObject: Model; // Declare the next state object that will be set in the new state
       // Check if we have a previous state
       if (typeof previousState !== "undefined") {
         /**
@@ -153,9 +153,11 @@ const cratebox = function() {
       state.set(identifier, { currentState: currentState, _data: nextState });
       // Check if we have a listener subscribing to this store
       if (listeners.has(identifier)) {
-        // If we do, then we should call the listener :)
-        const listener: Function | null = listeners.get(identifier) || null;
-        if (listener) listener(nextStateObject);
+        // If we do, then we should call all of the listeners :)
+        const storeListeners: Function[] | null = listeners.get(identifier) || null;
+        if (storeListeners && storeListeners.length !== 0) {
+          storeListeners.forEach(listener => listener(nextStateObject));
+        }
       } else {
         // If not, we warn the user that the store has changed but there's no listener attached to it
         // console.warn('A store has changed but it has no listener attached to it.');
@@ -183,13 +185,9 @@ const cratebox = function() {
         // If we do, then throw an error complaining about it :)
         throw new Error(`You're tyring to subscribe changes for a non-existent store.`);
       }
-      // Check if we already have a listener defined for this store
-      if (listeners.has(store)) {
-        // If we do, then throw an error complaining about it :)
-        throw new Error(`You're trying to set a listener to a store that already has a listener attached to it.`);
-      }
       // Add the listener to the store
-      listeners.set(store, listener);
+      const prevListeners: Function[] = listeners.get(store) || [];
+      listeners.set(store, [...prevListeners, listener]);
     },
     /**
      * This method makes a store time travel forwards
@@ -212,9 +210,11 @@ const cratebox = function() {
         // Then call the subscribed listener of the store with the current state :)
         // Check if we have a listener subscribing to this store
         if (listeners.has(identifier)) {
-          // If we do, then we should call the listener :)
-          const listener: Function | null = listeners.get(identifier) || null;
-          if (listener) listener(this.getState(identifier));
+          // If we do, then we should call all of the listener :)
+          const storeListeners: Function[] | null = listeners.get(identifier) || null;
+          if (storeListeners) {
+            storeListeners.forEach(listener => listener(this.getState(identifier)));
+          }
         } else {
           // If not, we warn the user that the store has changed but there's no listener attached to it
           // console.warn('A store has changed but it has no listener attached to it.');
@@ -245,9 +245,11 @@ const cratebox = function() {
         // Then call the subscribed listener of the store with the current state :)
         // Check if we have a listener subscribing to this store
         if (listeners.has(identifier)) {
-          // If we do, then we should call the listener :)
-          const listener: Function | null = listeners.get(identifier) || null;
-          if (listener) listener(this.getState(identifier));
+          // If we do, then we should call all of the listener :)
+          const storeListeners: Function[] | null = listeners.get(identifier) || null;
+          if (storeListeners) {
+            storeListeners.forEach(listener => listener(this.getState(identifier)));
+          }
         } else {
           // If not, we warn the user that the store has changed but there's no listener attached to it
           // console.warn('A store has changed but it has no listener attached to it.');
