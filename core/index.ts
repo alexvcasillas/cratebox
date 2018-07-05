@@ -53,14 +53,14 @@ const cratebox = function() {
      * the given description identifier.
      * @param {string} identifier
      */
-    getStoreDescription(identifier: string) {
+    getStoreDescription(identifier: string): Model {
       // Check if we have definied that store description
       if (!descriptions.has(identifier)) {
         // If we don't, then throw an error complaining about it :)
         throw new Error(`You're trying to get a store description that doesn't exists.`);
       }
       // If we do, then get the descriptor of the store based on the given identifier
-      return descriptions.get(identifier);
+      return descriptions.get(identifier) || {};
     },
     /**
      * This method returns the current state of the whole store object.
@@ -85,7 +85,7 @@ const cratebox = function() {
     /**
      * This method dispatches a new store action to the store by
      * the given store action object.
-     * @param {Model} dispatchObject
+     * @param {StoreModel} dispatchObject
      */
     dispatch(dispatchObject: StoreModel) {
       if (typeof dispatchObject === "undefined") {
