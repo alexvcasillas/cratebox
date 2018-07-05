@@ -1,7 +1,6 @@
 import resolve from "rollup-plugin-node-resolve";
 import filesize from "rollup-plugin-filesize";
-import uglify from "rollup-plugin-uglify";
-import babel from "rollup-plugin-babel";
+import { uglify } from "rollup-plugin-uglify";
 
 export default [
   {
@@ -10,7 +9,7 @@ export default [
       file: "./dist/cratebox.js",
       format: "cjs",
     },
-    plugins: [resolve(), uglify(), filesize()],
+    plugins: [resolve(), filesize()],
   },
   {
     input: "./lib/index.js",
@@ -27,6 +26,6 @@ export default [
       file: "./dist/cratebox.module.js",
       format: "es",
     },
-    plugins: [resolve(), uglify(), filesize()],
+    plugins: [resolve(), filesize()],
   },
 ];
