@@ -3,14 +3,18 @@
   "version": "0.5.1",
   "description": "State Management Library",
   "main": "dist/cratebox.js",
+  "umd:main": "dist/cratebox.umd.js",
+  "module": "dist/cratebox.module.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "start": "node core/index.js",
     "rollup": "rollup -c",
     "compile": "tsc",
     "demo": "yarn prepare && yarn cp-dist-demo && npx simplehttpserver ./demo",
+    "cp-td": "cpr lib dist --delete-first --filter=\\\\.js",
     "cp-dist-demo": "cpy dist/cratebox.umd.js demo",
     "test": "ava --verbose",
-    "prepare": "yarn compile && yarn rollup && yarn test"
+    "prepare": "yarn compile && yarn cp-td && yarn rollup && yarn test"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.44",
@@ -18,6 +22,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.44",
     "@babel/preset-env": "^7.0.0-beta.44",
     "ava": "1.0.0-beta.4",
+    "cpr": "^3.0.1",
     "cpy-cli": "^2.0.0",
     "rollup": "^0.62.0",
     "rollup-plugin-babel": "^4.0.0-beta.4",
