@@ -6,18 +6,23 @@
 
 # Contents
 
+- [Contents](#contents)
 - [Motivation](#motivation)
 - [Why Cratebox?](#why-cratebox)
 - [Installation](#installation)
 - [Getting Started](#getting-started)
 - [Describing a Store](#describing-a-store)
-- [Dispatching Changes](#dispatching-changes)
+- [Dispatching changes](#dispatching-changes)
 - [Retrieving State](#retrieving-state)
 - [Subscriptions](#subscriptions)
 - [Time Traveling](#time-traveling)
 - [Types](#types)
   - [Basic Types](#basic-types)
   - [Advanced Types](#advanced-types)
+    - [types.array(type: base)](#typesarraytype-base)
+    - [types.enum(enumeration: string[])](#typesenumenumeration-string)
+    - [types.literal(literal: string)](#typesliteralliteral-string)
+    - [types.frozen(frozen: object)](#typesfrozenfrozen-object)
 - [Implementations](#implementations)
   - [React](#react)
 - [Roadmap](#roadmap)
@@ -35,13 +40,13 @@ This is a question that often comes to my mind. Why you should use **Cratebox**?
 
 NPM
 
-```
+```sh
 npm install cratebox
 ```
 
 Yarn
 
-```
+```sh
 yarn add cratebox
 ```
 
@@ -49,7 +54,7 @@ yarn add cratebox
 
 To get started with **Cratebox** first of all you need to import the dependency into your project plus the typings dependency for your models.
 
-```
+```js
 import { cratebox, types } from 'cratebox`
 // Instantiate CrateBox
 const myCratebox = cratebox();
@@ -59,7 +64,7 @@ From that point on, you'll have access to the full API of **Cratebox**.
 
 # Describing a Store
 
-```
+```js
 myCratebox.describeStore({
   identifier: 'user',
   model: {
@@ -80,7 +85,7 @@ First of all we have the `describeStore` function. This function is the one in c
 
 The `describeStore` function takes on parameter that is an object will the following structure:
 
-```
+```js
 {
   identifier: string,
   model: model object
@@ -113,7 +118,7 @@ Ok, we've described our store so far at this point. Let's proceed with more stuf
 
 To dispatch a change into a store, we will call the `dispatch` function from the **Cratebox** API.
 
-```
+```js
 myCratebox.dispatch({
   identifier: 'user',
   model: {
@@ -132,7 +137,7 @@ Let's take a minute to process the code above. Got it? Ok, let's go for it.
 
 The `dispatch` function takes on single argument that is a `dispatch object`. This `dispatch object` contains the following properties:
 
-```
+```js
 {
   identifier: string,
   model: model object
@@ -145,7 +150,7 @@ The `identifier` property will tell **Cratebox** which of the `described stores`
 
 We can dispatch as many changes to a store as we want. You have to consider that you dispatch changes to a model, meaning that, calling the `dispatch` event with the following data:
 
-```
+```js
 myCratebox.dispatch({
   identifier: 'user',
   model: {
@@ -158,7 +163,7 @@ myCratebox.dispatch({
 
 Won't generate a new state with just:
 
-```
+```js
 {
   name: 'Antonio',
   lastName: 'Cobos',
@@ -168,7 +173,7 @@ Won't generate a new state with just:
 
 But instead will be:
 
-```
+```js
 {
   name: 'Antonio',
   lastName: 'Cobos',
@@ -184,7 +189,7 @@ As you can see, it will generate changes based on the previous state, making sur
 
 You also have to take note that properties that _are not described_ at the `describeStore()` function, won't affect your state if you try to dispatch properties not defined previously. For example:
 
-```
+```js
 myCratebox.dispatch({
   identifier: 'user',
   model: {
@@ -204,7 +209,7 @@ You can retrieve the current state of a specific store making use of our simple 
 
 This method will retrieve the current state of a store by the given identifier. Let's look at an example:
 
-```
+```js
 // Describe the store
 myCratebox.describeStore({
   identifier: 'user',
@@ -229,7 +234,7 @@ console.log( myCratebox.getState('user') );
 
 The code above will give you the following output in your console:
 
-```
+```js
 {
   name: 'Alex',
   lastName: 'Casillas',
@@ -242,7 +247,7 @@ Subscriptions will let you listen to changes to a given store. This way you'll b
 
 The way of subscribing to changes within a particular store is:
 
-```
+```js
 myCratebox.subscribe('user', model => {
   // Handle your changes the way you want here :)
 });
@@ -254,7 +259,7 @@ This method takes two arguments, the `identifier` of the store you want to track
 
 Let's see the following case as example:
 
-```
+```js
 // Describe the store
 myCratebox.describeStore({
   identifier: 'user',
@@ -281,7 +286,7 @@ myCratebox.dispatch({
 
 At the right moment you `dispatch` the changes to the `user store`. The subscription hook will be called and you'll get the following output logged at the console:
 
-```
+```js
 {
   name: 'Antonio',
   lastName: 'Cobos',
@@ -296,13 +301,13 @@ Time traveling is supported out of the box for you. We expose a simple API that 
 
 Let's say you want to travel backgrounds in your store, then you simply:
 
-```
+```js
 myCratebox.travelBackwards('user');
 ```
 
 Or let's say you want to travel forwards after you just traveled backwards, simply:
 
-```
+```js
 myCratebox.travelForwards('user');
 ```
 
@@ -312,7 +317,7 @@ Both of the methods require one single argument: the store `identifier` of the s
 
 Let's take a look at this with a little example:
 
-```
+```js
 // Describe the store
 myCratebox.describeStore({
   identifier: 'user',
@@ -353,7 +358,7 @@ myCratebox.travelForwards('user');
 
 When executing the example above you'll have the following output:
 
-```
+```js
 // First Dispatch
 Store Changes: { name: 'Alex', lastName: 'Casillas' }
 // Second Dispatch
@@ -393,7 +398,7 @@ The array type recieves a basic type as a single parameter and will make sure th
 
 For example:
 
-```
+```js
 myCratebox.describeStore({
   identifier: 'user',
   model: {
@@ -412,7 +417,7 @@ The enumeration type recieves an array of literal strings as a single parameter 
 
 For example
 
-```
+```js
 myCratebox.describeStore({
   identifier: 'notes',
   model: {
@@ -431,7 +436,7 @@ The literal type recieves a string literal to check against.
 
 For example
 
-```
+```js
 myCratebox.describeStore({
   identifier: 'notes',
   model: {
@@ -449,7 +454,7 @@ If you try to set the property `fixed` to another value that's not IMMUTABLE, in
 
 The frozen type receives an object with any properties that you want.
 
-```
+```js
 myCratebox.describeStore({
   identifier: 'notes',
   model: {
