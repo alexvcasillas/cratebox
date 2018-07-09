@@ -55,7 +55,7 @@ yarn add cratebox
 To get started with **Cratebox** first of all you need to import the dependency into your project plus the typings dependency for your models.
 
 ```js
-import { cratebox, types } from 'cratebox`
+import { cratebox, types } from 'cratebox'
 // Instantiate CrateBox
 const myCratebox = cratebox();
 ```
