@@ -261,3 +261,44 @@ test("it should compare model changes for array type properties", t => {
   });
   t.is(crate.getGlobalState().get("todos")._data.length, 2);
 });
+
+test("it should trigger a subscription at dispatch", t => {
+  t.plan(1);
+  const crate = cratebox();
+  crate.describeStore({
+    identifier: "todos",
+    model: {
+      todos: types.array(
+        types.frozen({
+          id: types.number,
+          title: types.string,
+          description: types.string,
+          completed: types.boolean,
+        }),
+      ),
+    },
+  });
+  let timesCalled = 0;
+  crate.subscribe("todos", model => {
+    timesCalled++;
+    if (timesCalled === 2) t.true(true);
+  });
+  crate.dispatch({
+    identifier: "todos",
+    model: {
+      todos: [
+        { id: 1, title: "Hello", description: "World", completed: true },
+        { id: 2, title: "Hola", description: "Mundo", completed: false },
+      ],
+    },
+  });
+  crate.dispatch({
+    identifier: "todos",
+    model: {
+      todos: [
+        { id: 1, title: "Hello", description: "World", completed: true },
+        { id: 2, title: "Hola", description: "Mundo", completed: true },
+      ],
+    },
+  });
+});
