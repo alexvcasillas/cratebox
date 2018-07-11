@@ -1,6 +1,8 @@
 import { types } from "./types";
 import { crateModel } from "./models";
 import { StoreModel, Model } from "./models/store-model";
+import { equal } from "./utils/fast-deep-equal";
+import { keyList } from "./utils/base.utils";
 
 /**
  * Store System
@@ -110,22 +112,21 @@ const cratebox = function() {
           delete model[key];
           return;
         }
-        // Typecheck agains the descriptor type-checker :)
-        if (!descriptor[key].checker(model[key])) {
-          // If it's not a valid type, then throw an error complaining about it :)
-          throw new Error(
-            `Type "${typeof model[key]}" cannot be setted to the property ${key} described as a/an "${
-              descriptor[key].name
-            }"`,
-          );
+        // Typecheck against the descriptor type-checker :)
+        const checkResult = descriptor[key].checker(model[key]);
+        if (!checkResult) {
+          throw new TypeError(checkResult.message);
         }
       });
       // If all of the keys pass the type-checking then we proceed to set it into the store
       const previousState = state.get(identifier); // Get the previous state of the store
-      let nextState; // Declare the next state where we will set the new state
+      let nextState: Model; // Declare the next state where we will set the new state
       let nextStateObject: Model; // Declare the next state object that will be set in the new state
       // Check if we have a previous state
       if (typeof previousState !== "undefined") {
+        // We have to check if there are changes within the model and if there aren't we just return
+        // because it doesn't make sense that we should generate a new state that's exactly as the previous one
+        if (equal(model, previousState._data.slice(-1)[0])) return;
         /**
          * If so, then simply just set the nextState as a new array with a
          * copy of the previous state data and adding to it the data model
@@ -133,7 +134,7 @@ const cratebox = function() {
          * new model data, so we respect the properties that where missing
          * from a new state change.
          */
-        const { model: safeModel } = crateModel({
+        const safeModel = crateModel({
           ...previousState._data.slice(-1)[0],
           ...model,
         }); // Safe cratebox model
@@ -144,7 +145,7 @@ const cratebox = function() {
          * If we don't have a previous state, just set the nextState
          * as a new array holding the new dispatched data model within it
          */
-        const { model: safeModel } = crateModel(model); // Safe cratebox model
+        const safeModel = crateModel(model); // Safe cratebox model
         nextState = [safeModel];
         // If it's our first state, we should return the nextStateObject as the received model
         nextStateObject = safeModel;

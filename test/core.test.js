@@ -198,3 +198,66 @@ test("it should complain when dispatching without model", t => {
   const error = t.throws(() => crate.dispatch({ identifier: "user" }), Error);
   t.is(error.message, `You need a model with the changes you would like to apply`);
 });
+
+test("it should return the previous state when dispatching changes that doesn't update the model", t => {
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  crate.dispatch({
+    identifier: "user",
+    model: {
+      name: "Alex",
+      lastName: "Casillas",
+      age: 28,
+    },
+  });
+  crate.dispatch({
+    identifier: "user",
+    model: {
+      name: "Alex",
+      lastName: "Casillas",
+      age: 28,
+    },
+  });
+  t.deepEqual(crate.getState("user"), {
+    name: "Alex",
+    lastName: "Casillas",
+    age: 28,
+  });
+  t.is(crate.getGlobalState().get("user")._data.length, 1);
+});
+
+test("it should compare model changes for array type properties", t => {
+  const crate = cratebox();
+  crate.describeStore({
+    identifier: "todos",
+    model: {
+      todos: types.array(
+        types.frozen({
+          id: types.number,
+          title: types.string,
+          description: types.string,
+          completed: types.boolean,
+        }),
+      ),
+    },
+  });
+  crate.dispatch({
+    identifier: "todos",
+    model: {
+      todos: [
+        { id: 1, title: "Hello", description: "World", completed: true },
+        { id: 2, title: "Hola", description: "Mundo", completed: false },
+      ],
+    },
+  });
+  crate.dispatch({
+    identifier: "todos",
+    model: {
+      todos: [
+        { id: 1, title: "Hello", description: "World", completed: true },
+        { id: 2, title: "Hola", description: "Mundo", completed: true },
+      ],
+    },
+  });
+  t.is(crate.getGlobalState().get("todos")._data.length, 2);
+});
