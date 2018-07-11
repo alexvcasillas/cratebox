@@ -1,8 +1,11 @@
+import { isArray, keyList, checkerResponse } from "../utils/base.utils";
+import { Model } from "../models/store-model";
+
 /**
  * This function checks if the function has received a parameter
  * @param {any} param
  */
-function isUndefined(param: any) {
+function isUndefined(param: any): boolean {
   return typeof param === "undefined";
 }
 
@@ -18,7 +21,7 @@ function checkTypeChecker(type: any): boolean {
  * This function checks if the provided value is a plain object
  * @param {object} value
  */
-function isPlainObject(value: object) {
+function isPlainObject(value: object): boolean {
   if (value === null || typeof value !== "object") return false;
   const proto = Object.getPrototypeOf(value);
   return proto === Object.prototype || proto === null;
@@ -50,19 +53,22 @@ export const advancedTypes = {
     return {
       name: "array",
       type: type,
-      checker(v: Array<any>): boolean {
+      checker(v: Array<any>): checkerResponse {
         // Check if it's an array
-        if (!Array.isArray(v)) return false;
+        if (!isArray(v)) return { success: false, message: `Type "${typeof v}" could not be assigned to an Array` };
         // Check if it has length 0 to prevent executing array type of elements
-        if (v.length === 0) return true;
-        // Set a flag for checking all of the elements
-        let allOk = true;
+        if (v.length === 0) return { success: true };
         // Ietarte through the elements
-        v.forEach((e: any) => {
-          // Check if the type of this particular element matches the type of this array
-          if (!this.type.checker(e)) allOk = false;
-        });
-        return allOk;
+        let iterationError: checkerResponse | null = null;
+        for (let index = 0; index < v.length; index++) {
+          const element = v[index];
+          const checkResult = this.type.checker(element);
+          if (!checkResult.success) {
+            iterationError = { success: false, message: `[Array Check] ${checkResult.message}` };
+            break;
+          }
+        }
+        return iterationError || { success: true };
       },
     };
   },
@@ -89,8 +95,17 @@ export const advancedTypes = {
     return {
       name: "enum",
       enums: enumeration,
-      checker(v: string): boolean {
-        return this.enums.includes(v);
+      checker(v: string | null | Date): checkerResponse {
+        if (typeof v !== "string")
+          return {
+            success: false,
+            message: `Type "${
+              v instanceof Date ? "Date" : v === null ? "null" : typeof v
+            }" is not a valid type for an enumeration`,
+          };
+        return this.enums.includes(v)
+          ? { success: true }
+          : { success: false, message: `${v} doesn't match any of the enumerations: ${this.enums}` };
       },
     };
   },
@@ -110,8 +125,17 @@ export const advancedTypes = {
     return {
       name: "literal",
       literal: literal,
-      checker(v: string): boolean {
-        return v === literal;
+      checker(v: string | null | Date): checkerResponse {
+        if (typeof v !== "string")
+          return {
+            success: false,
+            message: `Type "${
+              v instanceof Date ? "Date" : v === null ? "null" : typeof v
+            }" is not a valid type for a string literal`,
+          };
+        if (v !== literal)
+          return { success: false, message: `${v} doesn't match with the string literal ${this.literal}` };
+        return { success: true };
       },
     };
   },
@@ -143,14 +167,32 @@ export const advancedTypes = {
    *    name: name of the type for error feedback
    *    checker: function to check types against.
    */
-  frozen: function(obj: object) {
+  frozen: function(obj: Model) {
     if (isUndefined(obj) || !isPlainObject(obj)) {
-      throw new TypeError(`Frozen type must be declared with and object literal`);
+      throw new TypeError(`Frozen type must be declared with an object literal`);
     }
     return {
       name: "frozen",
-      checker(v: object): boolean {
-        return isPlainObject(v);
+      properties: obj,
+      checker(model: Model | null | Date): checkerResponse {
+        if (model === null || model instanceof Date || !isPlainObject(model))
+          return {
+            success: false,
+            message: `Type "${
+              model instanceof Date ? "Date" : model === null ? "null" : typeof model
+            }" is not a valid frozen type`,
+          };
+        try {
+          keyList(model).forEach(
+            (frozenProperty: any): checkerResponse | void => {
+              const { success, message } = this.properties[frozenProperty].checker(model[frozenProperty]);
+              if (!success) throw new TypeError(`[Frozen Check] ${message} on property "${frozenProperty}"`);
+            },
+          );
+        } catch (error) {
+          return { success: false, message: error.message };
+        }
+        return { success: true };
       },
     };
   },
