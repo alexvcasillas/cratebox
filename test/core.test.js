@@ -198,3 +198,132 @@ test("it should complain when dispatching without model", t => {
   const error = t.throws(() => crate.dispatch({ identifier: "user" }), Error);
   t.is(error.message, `You need a model with the changes you would like to apply`);
 });
+
+test("it should return the previous state when dispatching changes that doesn't update the model", t => {
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  crate.dispatch({
+    identifier: "user",
+    model: {
+      name: "Alex",
+      lastName: "Casillas",
+      age: 28,
+    },
+  });
+  crate.dispatch({
+    identifier: "user",
+    model: {
+      name: "Alex",
+      lastName: "Casillas",
+      age: 28,
+    },
+  });
+  t.deepEqual(crate.getState("user"), {
+    name: "Alex",
+    lastName: "Casillas",
+    age: 28,
+  });
+  t.is(crate.getGlobalState().get("user")._data.length, 1);
+});
+
+test("it should compare model changes for array type properties", t => {
+  const crate = cratebox();
+  crate.describeStore({
+    identifier: "todos",
+    model: {
+      todos: types.array(
+        types.frozen({
+          id: types.number,
+          title: types.string,
+          description: types.string,
+          completed: types.boolean,
+        }),
+      ),
+    },
+  });
+  crate.dispatch({
+    identifier: "todos",
+    model: {
+      todos: [
+        { id: 1, title: "Hello", description: "World", completed: true },
+        { id: 2, title: "Hola", description: "Mundo", completed: false },
+      ],
+    },
+  });
+  crate.dispatch({
+    identifier: "todos",
+    model: {
+      todos: [
+        { id: 1, title: "Hello", description: "World", completed: true },
+        { id: 2, title: "Hola", description: "Mundo", completed: true },
+      ],
+    },
+  });
+  t.is(crate.getGlobalState().get("todos")._data.length, 2);
+});
+
+test("it should trigger a subscription at dispatch", t => {
+  t.plan(1);
+  const crate = cratebox();
+  crate.describeStore({
+    identifier: "todos",
+    model: {
+      todos: types.array(
+        types.frozen({
+          id: types.number,
+          title: types.string,
+          description: types.string,
+          completed: types.boolean,
+        }),
+      ),
+    },
+  });
+  let timesCalled = 0;
+  crate.subscribe("todos", model => {
+    timesCalled++;
+    if (timesCalled === 2) t.true(true);
+  });
+  crate.dispatch({
+    identifier: "todos",
+    model: {
+      todos: [
+        { id: 1, title: "Hello", description: "World", completed: true },
+        { id: 2, title: "Hola", description: "Mundo", completed: false },
+      ],
+    },
+  });
+  crate.dispatch({
+    identifier: "todos",
+    model: {
+      todos: [
+        { id: 1, title: "Hello", description: "World", completed: true },
+        { id: 2, title: "Hola", description: "Mundo", completed: true },
+      ],
+    },
+  });
+});
+
+test("it should return the unsubscribe function when setting a subscription", t => {
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  const first_unsubscribe = crate.subscribe("user", model => {});
+  const second_unsubscribe = crate.subscribe("user", model => {});
+  t.true(typeof first_unsubscribe === "function" && typeof second_unsubscribe === "function");
+});
+
+test("it should return the amount of subscriptions added to a specific store", t => {
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  const first_unsubscribe = crate.subscribe("user", model => {});
+  const second_unsubscribe = crate.subscribe("user", model => {});
+  t.true(crate.getStoreSubscriptions("user").length === 2);
+});
+
+test("it should remove a subscription of the subscriptions to a specific store", t => {
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  const first_unsubscribe = crate.subscribe("user", model => {});
+  const second_unsubscribe = crate.subscribe("user", model => {});
+  second_unsubscribe();
+  t.true(crate.getStoreSubscriptions("user").length === 1);
+});
