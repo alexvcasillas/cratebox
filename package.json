@@ -1,6 +1,6 @@
 {
   "name": "cratebox",
-  "version": "0.7.0",
+  "version": "0.7.2",
   "description": "State Management Library",
   "main": "dist/cratebox.js",
   "umd:main": "dist/cratebox.umd.js",

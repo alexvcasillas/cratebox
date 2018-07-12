@@ -302,3 +302,28 @@ test("it should trigger a subscription at dispatch", t => {
     },
   });
 });
+
+test("it should return the unsubscribe function when setting a subscription", t => {
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  const first_unsubscribe = crate.subscribe("user", model => {});
+  const second_unsubscribe = crate.subscribe("user", model => {});
+  t.true(typeof first_unsubscribe === "function" && typeof second_unsubscribe === "function");
+});
+
+test("it should return the amount of subscriptions added to a specific store", t => {
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  const first_unsubscribe = crate.subscribe("user", model => {});
+  const second_unsubscribe = crate.subscribe("user", model => {});
+  t.true(crate.getStoreSubscriptions("user").length === 2);
+});
+
+test("it should remove a subscription of the subscriptions to a specific store", t => {
+  const crate = cratebox();
+  crate.describeStore(quickModel);
+  const first_unsubscribe = crate.subscribe("user", model => {});
+  const second_unsubscribe = crate.subscribe("user", model => {});
+  second_unsubscribe();
+  t.true(crate.getStoreSubscriptions("user").length === 1);
+});
