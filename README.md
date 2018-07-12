@@ -30,7 +30,7 @@
 
 # Motivation
 
-I started working on **Cratebox** to prove myself I was able to build a powerful state management library following the example of top notch developers like _Michel Weststrate_, _Dan Abramov_, _Jamie_ and many more. I wanted something robust and typed like _MobX State Tree_ but also wanted something clear and easy to use, and that's why I built **Cratebox**, to be an intermediate point between _MobX State Tree_ and _Redux_, robust and with a declarative and simple API that does the job always.
+I started working on **Cratebox** to prove myself I was able to build a powerful state management library following the example of top notch developers like _Michel Weststrate_, _Dan Abramov_, _James Kyle_ and many more. I wanted something robust and typed like _MobX State Tree_ but also wanted something clear and easy to use, and that's why I built **Cratebox**, to be an intermediate point between _MobX State Tree_ and _Redux_, robust and with a declarative and simple API that does the job always.
 
 # Why Cratebox?
 
@@ -55,7 +55,7 @@ yarn add cratebox
 To get started with **Cratebox** first of all you need to import the dependency into your project plus the typings dependency for your models.
 
 ```js
-import { cratebox, types } from 'cratebox'
+import { cratebox, types } from "cratebox";
 // Instantiate CrateBox
 const myCratebox = cratebox();
 ```
@@ -66,7 +66,7 @@ From that point on, you'll have access to the full API of **Cratebox**.
 
 ```js
 myCratebox.describeStore({
-  identifier: 'user',
+  identifier: "user",
   model: {
     name: types.string,
     lastName: types.string,
@@ -75,7 +75,7 @@ myCratebox.describeStore({
     birthDate: types.date,
     position: types.string,
     github: types.string,
-  }
+  },
 });
 ```
 
@@ -120,17 +120,17 @@ To dispatch a change into a store, we will call the `dispatch` function from the
 
 ```js
 myCratebox.dispatch({
-  identifier: 'user',
+  identifier: "user",
   model: {
-    name: 'Alex',
-    lastName: 'Casillas',
+    name: "Alex",
+    lastName: "Casillas",
     age: 28,
-    birthDate: new Date('1990-03-23'),
-    avatar: 'https://avatars3.githubusercontent.com/u/9496960?s=460&v=4',
-    position: 'Frontend Engineer',
-    github: 'https://github.com/alexvcasillas'
-  }
-})
+    birthDate: new Date("1990-03-23"),
+    avatar: "https://avatars3.githubusercontent.com/u/9496960?s=460&v=4",
+    position: "Frontend Engineer",
+    github: "https://github.com/alexvcasillas",
+  },
+});
 ```
 
 Let's take a minute to process the code above. Got it? Ok, let's go for it.
@@ -152,13 +152,13 @@ We can dispatch as many changes to a store as we want. You have to consider that
 
 ```js
 myCratebox.dispatch({
-  identifier: 'user',
+  identifier: "user",
   model: {
-    name: 'Antonio',
-    lastName: 'Cobos',
-    position: 'Backend Engineer',
-  }
-})
+    name: "Antonio",
+    lastName: "Cobos",
+    position: "Backend Engineer",
+  },
+});
 ```
 
 Won't generate a new state with just:
@@ -191,14 +191,14 @@ You also have to take note that properties that _are not described_ at the `desc
 
 ```js
 myCratebox.dispatch({
-  identifier: 'user',
+  identifier: "user",
   model: {
-    name: 'Antonio',
-    lastName: 'Cobos',
-    position: 'Backend Engineer',
-    mightyLevel: 'Over 9000!!'
-  }
-})
+    name: "Antonio",
+    lastName: "Cobos",
+    position: "Backend Engineer",
+    mightyLevel: "Over 9000!!",
+  },
+});
 ```
 
 This `dispatch` call will generate a new state with the described properties updated but the `mightyLevel` property will be discarded.
@@ -212,24 +212,24 @@ This method will retrieve the current state of a store by the given identifier. 
 ```js
 // Describe the store
 myCratebox.describeStore({
-  identifier: 'user',
+  identifier: "user",
   model: {
     name: types.string,
     lastName: types.string,
-  }
+  },
 });
 
 // Dispatch a new change at the user store
 myCratebox.dispatch({
-  identifier: 'user',
+  identifier: "user",
   model: {
-    name: 'Alex',
-    lastName: 'Casillas',
-  }
-})
+    name: "Alex",
+    lastName: "Casillas",
+  },
+});
 
 // Call the Get State method
-console.log( myCratebox.getState('user') );
+console.log(myCratebox.getState("user"));
 ```
 
 The code above will give you the following output in your console:
@@ -248,7 +248,7 @@ Subscriptions will let you listen to changes to a given store. This way you'll b
 The way of subscribing to changes within a particular store is:
 
 ```js
-myCratebox.subscribe('user', model => {
+myCratebox.subscribe("user", model => {
   // Handle your changes the way you want here :)
 });
 ```
@@ -262,26 +262,26 @@ Let's see the following case as example:
 ```js
 // Describe the store
 myCratebox.describeStore({
-  identifier: 'user',
+  identifier: "user",
   model: {
     name: types.string,
     lastName: types.string,
-  }
+  },
 });
 
 // Create a subscriber for the user store
-myCratebox.subscribe('user', model => {
+myCratebox.subscribe("user", model => {
   console.log(model);
-})
+});
 
 // Dispatch a new change at the user store
 myCratebox.dispatch({
-  identifier: 'user',
+  identifier: "user",
   model: {
-    name: 'Antonio',
-    lastName: 'Cobos',
-  }
-})
+    name: "Antonio",
+    lastName: "Cobos",
+  },
+});
 ```
 
 At the right moment you `dispatch` the changes to the `user store`. The subscription hook will be called and you'll get the following output logged at the console:
@@ -302,13 +302,13 @@ Time traveling is supported out of the box for you. We expose a simple API that 
 Let's say you want to travel backgrounds in your store, then you simply:
 
 ```js
-myCratebox.travelBackwards('user');
+myCratebox.travelBackwards("user");
 ```
 
 Or let's say you want to travel forwards after you just traveled backwards, simply:
 
 ```js
-myCratebox.travelForwards('user');
+myCratebox.travelForwards("user");
 ```
 
 Let's dive a little into the Time Traveling API. It's simple, we expose to methods: `travelBackwards` and `travelForwards`.
@@ -320,40 +320,40 @@ Let's take a look at this with a little example:
 ```js
 // Describe the store
 myCratebox.describeStore({
-  identifier: 'user',
+  identifier: "user",
   model: {
     name: types.string,
     lastName: types.string,
-  }
+  },
 });
 
 // Create a subscriber for the user store
-myCratebox.subscribe('user', model => {
-  console.log('Store Changes: ', model);
-})
+myCratebox.subscribe("user", model => {
+  console.log("Store Changes: ", model);
+});
 
 // Dispatch a new change at the user store
 myCratebox.dispatch({
-  identifier: 'user',
+  identifier: "user",
   model: {
-    name: 'Alex',
-    lastName: 'Casillas',
-  }
-})
+    name: "Alex",
+    lastName: "Casillas",
+  },
+});
 
 // Dispatch another change at the user store
 myCratebox.dispatch({
-  identifier: 'user',
+  identifier: "user",
   model: {
-    name: 'Antonio',
-    lastName: 'Cobos',
-  }
-})
+    name: "Antonio",
+    lastName: "Cobos",
+  },
+});
 
 // Call the Travel Backwards method
-myCratebox.travelBackwards('user');
+myCratebox.travelBackwards("user");
 // Call the Travel Forwards method
-myCratebox.travelForwards('user');
+myCratebox.travelForwards("user");
 ```
 
 When executing the example above you'll have the following output:
@@ -379,14 +379,14 @@ All of the types are to be imported from the `types` namespace.
 
 ## Basic Types
 
-The basic types of **Cratebox** are the following and self explanatory
+The basic types are the core types of any (almost every) programming language. We use this types to build a solid structure for our data. Those types are the following:
 
-- types.string
-- types.number
-- types.boolean
-- types.null
-- types.undefined
-- types.date
+- **String Type** -  this type can contain any value of type string and null.
+- **Number Type** -  this type can contain any value of type number and null.
+- **Boolean Type** -  this type can contain any value of type boolean.
+- **Null Type ** - this type can contain any value of type null.
+- **Undefined Type** -  this type can contain any value of type undefined.
+- **Date Type**  - this type can contain any value of type Date.
 
 ## Advanced Types
 
@@ -400,12 +400,12 @@ For example:
 
 ```js
 myCratebox.describeStore({
-  identifier: 'user',
+  identifier: "user",
   model: {
     name: types.string,
     lastName: types.string,
-    notes: types.array(types.string)
-  }
+    notes: types.array(types.string),
+  },
 });
 ```
 
@@ -452,7 +452,7 @@ If you try to set the property `fixed` to another value that's not IMMUTABLE, in
 
 ### types.frozen(frozen: object)
 
-The frozen type receives an object with any properties that you want.
+The frozen type receives an object with a typed object structure.
 
 ```js
 myCratebox.describeStore({
@@ -462,21 +462,29 @@ myCratebox.describeStore({
     description: types.string
     status: types.enum(['DRAFT', 'PUBLISHED', 'HIDDEN']),
     fixed: types.literal('IMMUTABLE'),
-    custom: types.frozen
+    auth: types.frozen({
+      name: types.string,
+      lastName: types.string,
+      age: types.number,
+      admin: types.boolean
+    })
   }
 });
 
 myCratebox.dispatch({
   identifier: 'notes',
   model: {
-    custom: {
-      hasReferences: true,
-      shareButtons: true,
-      allowComments: false
+    auth: {
+      name: 'Alex',
+      lastName: 'Casillas',
+      age: 28,
+      admin: true
     }
   }
 })
 ```
+
+Frozen type will check for it's inner typed properties everytime you make a dispatch to any of this properties to make sure that all of them meet the specified requirements.
 
 # Implementations
 
