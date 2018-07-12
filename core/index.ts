@@ -1,8 +1,9 @@
 import { types } from "./types";
-import { crateModel } from "./models";
+import { crateModel } from "./models/crate-model";
+import { CrateboxModel } from "./models/cratebox-model";
 import { StoreModel, Model } from "./models/store-model";
+import { SubscriptionModel } from "./models/subscription-model";
 import { equal } from "./utils/fast-deep-equal";
-import { keyList } from "./utils/base.utils";
 
 /**
  * Store System
@@ -10,20 +11,20 @@ import { keyList } from "./utils/base.utils";
  * describing the stores within it, dispatching store changes and
  * returning the current state of the store.
  */
-const cratebox = function() {
+const cratebox = function(): CrateboxModel {
   // Map that contains all of the store definitions
   const descriptions: Map<string, Model> = new Map();
   // Map that contains all of the store changes based on the store definitions
   const state: Map<string, Model> = new Map();
   // Map that contains all of the subscription listeners
-  const listeners: Map<string, Array<Function>> = new Map();
+  const listeners: Map<string, Array<SubscriptionModel>> = new Map();
 
   return {
     /**
      * This method describes a store based on a store model object.
      * @param {object} storeModel
      */
-    describeStore(storeModel: StoreModel) {
+    describeStore(storeModel: StoreModel): void {
       // Check for store model object
       if (typeof storeModel === "undefined") {
         throw new Error(`You can't define a store without a store model object`);
@@ -67,7 +68,7 @@ const cratebox = function() {
     /**
      * This method returns the current state of the whole store object.
      */
-    getGlobalState() {
+    getGlobalState(): Map<string, Model> {
       return state;
     },
     /**
@@ -85,11 +86,18 @@ const cratebox = function() {
       }
     },
     /**
+     * This method returns the current listeners for a specified store
+     * @param {string} identifier
+     */
+    getStoreSubscriptions(identifier: string): SubscriptionModel[] {
+      return listeners.get(identifier) || [];
+    },
+    /**
      * This method dispatches a new store action to the store by
      * the given store action object.
      * @param {StoreModel} dispatchObject
      */
-    dispatch(dispatchObject: StoreModel) {
+    dispatch(dispatchObject: StoreModel): void {
       if (typeof dispatchObject === "undefined") {
         throw new Error(`You can't dispatch changes without a dispatch object: { identifier: string, model: object }`);
       }
@@ -155,9 +163,9 @@ const cratebox = function() {
       // Check if we have a listener subscribing to this store
       if (listeners.has(identifier)) {
         // If we do, then we should call all of the listeners :)
-        const storeListeners: Function[] | null = listeners.get(identifier) || null;
+        const storeListeners: SubscriptionModel[] | null = listeners.get(identifier) || null;
         if (storeListeners && storeListeners.length !== 0) {
-          storeListeners.forEach(listener => listener(nextStateObject));
+          storeListeners.forEach(listener => listener.subscription(nextStateObject));
         }
       } else {
         // If not, we warn the user that the store has changed but there's no listener attached to it
@@ -170,7 +178,7 @@ const cratebox = function() {
      * @param {string} store
      * @param {Function} listener
      */
-    subscribe(store: string, listener: Function) {
+    subscribe(store: string, listener: Function): Function {
       // Check if we have a defined store to attached the listener to
       if (typeof store === "undefined") {
         // If we don't, then throw an error complaining about it :)
@@ -187,8 +195,23 @@ const cratebox = function() {
         throw new Error(`You're tyring to subscribe changes for a non-existent store.`);
       }
       // Add the listener to the store
-      const prevListeners: Function[] = listeners.get(store) || [];
-      listeners.set(store, [...prevListeners, listener]);
+      const prevListeners: SubscriptionModel[] = listeners.get(store) || [];
+      const subscriber: SubscriptionModel = {
+        identifier: `sub-${prevListeners.length + 1}`,
+        subscription: listener,
+        store,
+      };
+      listeners.set(store, [...prevListeners, subscriber]);
+      return function() {
+        const _subscriber: SubscriptionModel = subscriber;
+        const storedListeners: SubscriptionModel[] = listeners.get(_subscriber.store) || [];
+        listeners.set(
+          _subscriber.store,
+          storedListeners.filter(
+            (storedListener: SubscriptionModel) => storedListener.identifier !== _subscriber.identifier,
+          ),
+        );
+      };
     },
     /**
      * This method makes a store time travel forwards
@@ -212,9 +235,9 @@ const cratebox = function() {
         // Check if we have a listener subscribing to this store
         if (listeners.has(identifier)) {
           // If we do, then we should call all of the listener :)
-          const storeListeners: Function[] | null = listeners.get(identifier) || null;
+          const storeListeners: SubscriptionModel[] | null = listeners.get(identifier) || null;
           if (storeListeners) {
-            storeListeners.forEach(listener => listener(this.getState(identifier)));
+            storeListeners.forEach(listener => listener.subscription(this.getState(identifier)));
           }
         } else {
           // If not, we warn the user that the store has changed but there's no listener attached to it
@@ -247,9 +270,9 @@ const cratebox = function() {
         // Check if we have a listener subscribing to this store
         if (listeners.has(identifier)) {
           // If we do, then we should call all of the listener :)
-          const storeListeners: Function[] | null = listeners.get(identifier) || null;
+          const storeListeners: SubscriptionModel[] | null = listeners.get(identifier) || null;
           if (storeListeners) {
-            storeListeners.forEach(listener => listener(this.getState(identifier)));
+            storeListeners.forEach(listener => listener.subscription(this.getState(identifier)));
           }
         } else {
           // If not, we warn the user that the store has changed but there's no listener attached to it
