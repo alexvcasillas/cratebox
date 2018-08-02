@@ -180,7 +180,7 @@ But instead will be:
   avatar: 'https://avatars3.githubusercontent.com/u/9496960?s=460&v=4',
   age: 28,
   birthDate: '1990-03-23',
-  position: 'Backend Engineer Engineer',
+  position: 'Backend Engineer',
   github: 'https://github.com/alexvcasillas'
 }
 ```
