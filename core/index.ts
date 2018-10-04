@@ -1,9 +1,11 @@
-import { types } from "./types";
-import { crateModel } from "./models/crate-model";
-import { CrateboxModel } from "./models/cratebox-model";
-import { StoreModel, Model } from "./models/store-model";
-import { SubscriptionModel } from "./models/subscription-model";
-import { equal } from "./utils/fast-deep-equal";
+import { types } from './types';
+import { crateModel } from './models/crate-model';
+import { CrateboxModel } from './models/cratebox-model';
+import { StoreModel, Model } from './models/store-model';
+import { SubscriptionModel } from './models/subscription-model';
+import { equal } from './utils/fast-deep-equal';
+
+const uuid = require('uuid/v4');
 
 /**
  * Store System
@@ -26,15 +28,15 @@ const cratebox = function(): CrateboxModel {
      */
     describeStore(storeModel: StoreModel): void {
       // Check for store model object
-      if (typeof storeModel === "undefined") {
+      if (typeof storeModel === 'undefined') {
         throw new Error(`You can't define a store without a store model object`);
       }
       // Check for the identifier
-      if (!storeModel.hasOwnProperty("identifier")) {
+      if (!storeModel.hasOwnProperty('identifier')) {
         throw new Error(`You can't describe a store without an identifier`);
       }
       // Check for the model
-      if (!storeModel.hasOwnProperty("model")) {
+      if (!storeModel.hasOwnProperty('model')) {
         throw new Error(`You can't describe a store without a model`);
       }
       // Check if we already have the given store described
@@ -78,7 +80,7 @@ const cratebox = function(): CrateboxModel {
     getState(identifier: string): Model | null {
       const theState: Model = state.get(identifier) || {};
       if (!theState) return null;
-      if (state.get(identifier) || typeof state.get(identifier) !== "undefined") {
+      if (state.get(identifier) || typeof state.get(identifier) !== 'undefined') {
         const currentState = theState.currentState;
         return theState._data.slice(currentState, currentState + 1)[0];
       } else {
@@ -98,7 +100,7 @@ const cratebox = function(): CrateboxModel {
      * @param {StoreModel} dispatchObject
      */
     dispatch(dispatchObject: StoreModel): void {
-      if (typeof dispatchObject === "undefined") {
+      if (typeof dispatchObject === 'undefined') {
         throw new Error(`You can't dispatch changes without a dispatch object: { identifier: string, model: object }`);
       }
       const { identifier, model } = dispatchObject;
@@ -131,7 +133,7 @@ const cratebox = function(): CrateboxModel {
       let nextState: Model; // Declare the next state where we will set the new state
       let nextStateObject: Model; // Declare the next state object that will be set in the new state
       // Check if we have a previous state
-      if (typeof previousState !== "undefined") {
+      if (typeof previousState !== 'undefined') {
         // We have to check if there are changes within the model and if there aren't we just return
         // because it doesn't make sense that we should generate a new state that's exactly as the previous one
         if (equal(model, previousState._data.slice(-1)[0])) return;
@@ -180,12 +182,12 @@ const cratebox = function(): CrateboxModel {
      */
     subscribe(store: string, listener: Function): Function {
       // Check if we have a defined store to attached the listener to
-      if (typeof store === "undefined") {
+      if (typeof store === 'undefined') {
         // If we don't, then throw an error complaining about it :)
         throw new Error(`The subscription method needs a store to subscribe to`);
       }
       // Check if we have a defined function for the listener callback
-      if (typeof listener !== "function") {
+      if (typeof listener !== 'function') {
         // If we don't, then throw an error complaining about it :)
         throw new Error(`Subscribe listener is expected to be a function.`);
       }
@@ -197,7 +199,7 @@ const cratebox = function(): CrateboxModel {
       // Add the listener to the store
       const prevListeners: SubscriptionModel[] = listeners.get(store) || [];
       const subscriber: SubscriptionModel = {
-        identifier: `sub-${prevListeners.length + 1}`,
+        identifier: `sub-${uuid()}`,
         subscription: listener,
         store,
       };
