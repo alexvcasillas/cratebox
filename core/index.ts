@@ -46,6 +46,11 @@ const cratebox = function(): CrateboxModel {
       }
       // If not, then we will set a new description based on the identifier and the model
       descriptions.set(storeModel.identifier, { ...storeModel.model });
+      // Check if the described store has a afterDescribe lifecycle hook & it's of the right type (function)
+      if (storeModel.hasOwnProperty('afterDescribe') && typeof storeModel.afterDescribe === 'function') {
+        // Execute it, passing self (this) as a parameter to the function :)
+        storeModel.afterDescribe(this);
+      }
     },
     /**
      * This method returns all of the store descriptions in the store.
