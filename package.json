@@ -45,6 +45,9 @@
   ],
   "author": "Alex Casillas <https://alexvcasillas.com>",
   "license": "MIT",
+  "engines": {
+    "node": "10.x"
+  },
   "dependencies": {
     "uuid": "^3.3.2"
   }
