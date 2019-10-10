@@ -4,6 +4,7 @@ import { CrateboxModel } from './models/cratebox-model';
 import { StoreModel, Model } from './models/store-model';
 import { SubscriptionModel } from './models/subscription-model';
 import { equal } from './utils/fast-deep-equal';
+import { checkerResponse } from './utils/base.utils';
 
 const uuid = require('uuid/v4');
 
@@ -128,8 +129,8 @@ const cratebox = function(): CrateboxModel {
           return;
         }
         // Typecheck against the descriptor type-checker :)
-        const checkResult = descriptor[key].checker(model[key]);
-        if (!checkResult) {
+        const checkResult: checkerResponse = descriptor[key].checker(model[key]);
+        if (!checkResult.success) {
           throw new TypeError(checkResult.message);
         }
       });

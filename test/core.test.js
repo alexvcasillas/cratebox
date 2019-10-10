@@ -17,6 +17,12 @@ test('it should describe a store', t => {
   t.is(crate.getStoreDescriptions().size, 1);
 });
 
+test('it should return a StoreObject after describing a store', t => {
+  const crate = cratebox();
+  const storeObject = crate.describeStore(quickModel);
+  t.is(1, 1);
+});
+
 test('it tries to get the state without any previously dispatched changes', t => {
   const crate = cratebox();
   t.is(crate.getState('user'), null);
