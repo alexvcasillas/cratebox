@@ -185,6 +185,8 @@ export const advancedTypes = {
         try {
           keyList(model).forEach(
             (frozenProperty: any): checkerResponse | void => {
+              // Do not do a type check if the property doesn't exists on the model
+              if (!this.properties[frozenProperty]) return;
               const { success, message } = this.properties[frozenProperty].checker(model[frozenProperty]);
               if (!success) throw new TypeError(`[Frozen Check] ${message} on property "${frozenProperty}"`);
             },
