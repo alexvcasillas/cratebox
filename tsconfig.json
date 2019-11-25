@@ -1,22 +1,30 @@
 {
+  "include": ["src", "types", "test"],
   "compilerOptions": {
     "target": "es5",
-    "sourceMap": true,
-    "declaration": true,
-    "module": "es2015",
-    "removeComments": true,
-    "outDir": "lib/",
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "strict": true,
-    "strictPropertyInitialization": false,
-    "strictNullChecks": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
+    "module": "esnext",
+    "lib": ["dom", "esnext"],
     "importHelpers": true,
-    "lib": ["es2016"]
-  },
-  "files": ["core/index.ts"]
+    "declaration": true,
+    "sourceMap": true,
+    "rootDir": "./",
+    "strict": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "*": ["src/*", "node_modules/*"]
+    },
+    "jsx": "react",
+    "esModuleInterop": true
+  }
 }
