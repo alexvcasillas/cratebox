@@ -1,58 +1,36 @@
-type Store<T, V, A> = {
+import arrayPlugin from './plugins/array.plugin';
+import mapPlugin from './plugins/map.plugin';
+import objectPlugin from './plugins/object.plugin';
+
+export type Store<T, V, A> = {
   state: T;
   views?: V;
   actions?: A;
 };
 
-export function createStore<T, V, A>(
+type Plugin = <T, V, A>(
   state: T,
   views?: (state: T) => V,
   actions?: (state: T) => A
+) => Store<T, V, A>;
+
+export function createStore<T, V, A>(
+  state: T,
+  views?: (state: T) => V,
+  actions?: (state: T) => A,
+  plugin?: Plugin,
 ): Store<T, V, A> {
-  const proxiedState = new Proxy<any>(state, {
-    get(target: object, prop: string, receiver: any) {
-      if (!target[prop] && !target['defaults'][prop]) {
-        throw new Error(`Property [${prop}] doesn't exists on state.`);
-      }
-      if (!target[prop] && target['defaults'][prop]) {
-        return target['defaults'][prop];
-      }
-      return Reflect.get(target, prop, receiver);
-    },
-    set(object: object, prop: string, value: any) {
-      if (prop === 'secure') return Reflect.set(object, prop, value);
-      if (!object['secure']) {
-        throw new Error(
-          `Cannot manually update the [${prop}] property. Dispatch and action instead.`
-        );
-      }
-      delete proxiedState.secure;
-      return Reflect.set(object, prop, value);
-    },
-  });
+  if (state instanceof Map)
+    return typeof plugin !== "undefined"
+      ? plugin<T, V, A>(state, views, actions)
+      : mapPlugin<T, V, A>(state, views, actions);
 
-  const proxiedViews = new Proxy<any>(state, {
-    get(_: object, prop: string, __: any) {
-      return views && views(proxiedState)[prop];
-    },
-    set(_: object, __: string, ___: any) {
-      throw new Error('Cannot force override a view');
-    },
-  });
-
-  const proxiedActions = new Proxy<any>(state, {
-    get(_: object, prop: string, __: any) {
-      proxiedState.secure = true;
-      return actions && actions(proxiedState)[prop];
-    },
-    set(_: object, __: string, ___: any) {
-      throw new Error('Cannot force override an action');
-    },
-  });
-
-  return {
-    state: proxiedState,
-    views: proxiedViews,
-    actions: proxiedActions,
-  };
+  if (state instanceof Array)
+    return typeof plugin !== "undefined"
+      ? plugin<T, V, A>(state, views, actions)
+      : arrayPlugin<T, V, A>(state, views, actions)
+      
+  return typeof plugin !== "undefined"
+    ? plugin<T, V, A>(state, views, actions)
+    : objectPlugin<T, V, A>(state, views, actions);
 }
