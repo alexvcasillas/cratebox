@@ -1,6 +1,6 @@
 {
   "name": "cratebox",
-  "version": "2.0.0-alpha.3.0.0",
+  "version": "2.1.0",
   "license": "MIT",
   "author": "Alex Casillas",
   "main": "dist/index.js",
@@ -17,7 +17,8 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test",
-    "lint": "tsdx lint"
+    "lint": "tsdx lint",
+    "prepare": "tsdx build"
   },
   "peerDependencies": {},
   "husky": {

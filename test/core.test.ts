@@ -18,6 +18,7 @@ type Store = {
   state: UserState,
   views?: UserViews,
   actions?: UserActions,
+  subscribe: (listener: (state: UserState) => void) => () => void,
 }
 
 function initNewStore(): Store {
@@ -66,4 +67,13 @@ describe('Core features', () => {
       userStore.state.name = "John";
     }).toThrow("Cannot manually update the [name] property. Dispatch and action instead.");
   });
+  it('should subscribe and get changes in the store', () => {
+    const userStore = initNewStore();
+    const subscription = userStore.subscribe((state: UserState) => {
+      subscription();
+      expect(state.name).toBe("John"); // Expect to have changed
+    });
+    userStore.actions && userStore.actions.changeName("John");
+    expect(userStore.state.name).toBe("John"); // This is expected too as a common behaviour
+  })
 });
