@@ -43,7 +43,7 @@ Let's proceed to describe the signature a little.
   * **object**: a regular object type shape to manage state.
 * **views**: views are a function of state and are used to create computed properties.
 * **actions**: actions are a function of state and should be used to update state from within this function. Note that this is not a rule but it's recommended that you only update the state though actions so you can keep track of where and when you're applying changes to a store. The default plugin that comes with Cratebox will ensure that you don't apply changes directly to state at any point and only through actions.
-* **plugin**: plugins are a to handle your own state, views & actions logic for the given store. If you don't pass any plugin at the creation time, Cratebox will use it's default plugin for you.
+* **plugin**: plugins are a way to handle your own state, views & actions logic for the given store. If you don't pass any plugin at the creation time, Cratebox will use it's default plugin for you.
 
 ## Examples
 
@@ -119,7 +119,7 @@ export default userStore;
 
 ## Plugins
 
-With cratebox you have the ability to create your own plugins to handle state, views & actions in your own way. This gives your (the developer) the flexibility of using it's own business logic the way you see fit.
+With cratebox you have the ability to create your own plugins to handle state, views & actions in your own way. This gives you (the developer) the flexibility of using it's own business logic the way you see fit.
 
 The following example comes with a very simple implementation of a plugin for a store with an object type state based. You can use this as a base for your plugin and enhance it the way you consider better.
 
