@@ -1,6 +1,6 @@
 ![Cratebox.io Logo](https://github.com/alexvcasillas/cratebox/blob/main/public/cratebox-logo.svg)
 
-# Cratebox
+# 📦 Cratebox
 
 ```
 cratebox.io/:package@:version/:file
@@ -36,3 +36,5 @@ A simple example about how you can include a library server by Cratebox.io into 
   </body>
 </html>
 ```
+
+Here's a CodeSanbox link for the above example 👉 https://codesandbox.io/s/cratebox-io-simple-serve-example-lx4dbl
