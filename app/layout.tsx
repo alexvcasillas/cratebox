@@ -1,3 +1,5 @@
+import { Analytics } from "@vercel/analytics/react";
+
 export const metadata = {
   title: "Cratebox.io",
   description:
@@ -13,7 +15,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-gray-900">{children}</body>
+      <body className="bg-gray-900">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

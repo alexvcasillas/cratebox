@@ -37,4 +37,4 @@ A simple example about how you can include a library server by Cratebox.io into 
 </html>
 ```
 
-Here's a CodeSanbox link for the above example 👉 https://codesandbox.io/s/cratebox-io-simple-serve-example-lx4dbl
+Here's a CodeSandbox link for the above example 👉 https://codesandbox.io/s/cratebox-io-simple-serve-example-lx4dbl
