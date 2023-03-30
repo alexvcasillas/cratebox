@@ -105,13 +105,14 @@ async function getFileFromTarball(url: string, targetFileName: string) {
 }
 
 export async function GET(request: Request) {
-  const params = request.url.split("/");
+  const url = new URL(request.url);
+  console.log("url:", url);
+  const params = url.pathname.split("/");
   const file = params.pop();
   const folder = params.pop();
   const pkg = params.pop();
 
   console.log("request.url: ", request.url);
-
   console.log("file: ", file);
   console.log("folder: ", folder);
   console.log("pkg: ", pkg);
