@@ -141,7 +141,15 @@ export async function GET(
   try {
     const entry = await getFileFromTarball(tarballURL, `${folder}/${file}`);
 
-    if (!entry || !entry.content) return new Response("NOT FOUND");
+    if (!entry || !entry.content)
+      return new Response("NOT FOUND", {
+        status: 404,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "plain/text",
+          "Cache-Control": "max-age: 31536000, public, immutable",
+        },
+      });
 
     return new Response(entry.content.toString("utf8"), {
       status: 200,
@@ -153,6 +161,13 @@ export async function GET(
     });
   } catch (error: any) {
     console.error(`Error: ${error.message}`);
-    return new Response("ERROR");
+    return new Response("ERROR", {
+      status: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "plain/text",
+        "Cache-Control": "max-age: 31536000, public, immutable",
+      },
+    });
   }
 }
