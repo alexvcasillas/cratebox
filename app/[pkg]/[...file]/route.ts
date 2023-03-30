@@ -105,10 +105,9 @@ async function getFileFromTarball(url: string, targetFileName: string) {
 }
 
 export async function GET(
-  request: Request,
+  _: Request,
   { params }: { params: { file: string[]; pkg: string } }
 ) {
-  console.log({ params });
   let file, folder, pkg, scopedPkg;
 
   const isScopedPkg = params.pkg.startsWith("@");
@@ -125,28 +124,19 @@ export async function GET(
     pkg = params.pkg;
   }
 
-  console.log("request.url: ", request.url);
-  console.log("file: ", file);
-  console.log("folder: ", folder);
-  console.log("pkg: ", pkg);
-
   if (!pkg) return new Response('Missing "pkg" query param');
   if (!file) return new Response('Missing "file" query param');
 
   let tarballURL;
 
+  // Pattern: https://registry.npmjs.org/cratebox/-/cratebox-2.1.0.tgz
   if (isScopedPkg) {
-    console.log({ scopedPkg });
     const [pkgName, pkgVersion] = (pkg.split("/").pop() as string).split("@");
-    // Pattern: https://registry.npmjs.org/cratebox/-/cratebox-2.1.0.tgz
     tarballURL = `https://registry.npmjs.org/${scopedPkg}/-/${pkgName}-${pkgVersion}.tgz`;
   } else {
     const [pkgName, pkgVersion] = pkg.split("@");
-    // Pattern: https://registry.npmjs.org/cratebox/-/cratebox-2.1.0.tgz
     tarballURL = `https://registry.npmjs.org/${pkgName}/-/${pkgName}-${pkgVersion}.tgz`;
   }
-
-  console.log({ tarballURL });
 
   try {
     const entry = await getFileFromTarball(tarballURL, `${folder}/${file}`);
