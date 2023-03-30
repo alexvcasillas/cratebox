@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { Try } from "./(components)/try";
+import { GithubIcon } from "./(components)/github.icon";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -81,6 +83,45 @@ export default function Home() {
           </p>
           <div className="mt-10 items-center gap-x-6 flex">
             <Try />
+          </div>
+          <div className="mt-20 flex flex-col sm:flex-row sm:space-x-2 items-start sm:items-center text-white">
+            <Link
+              className="flex flex-row space-x-2 items-center hover:text-indigo-400"
+              href="https://github.com/alexvcasillas/cratebox"
+              target="_blank"
+            >
+              <span>Open Source in</span>
+              <span>
+                <GithubIcon />
+              </span>
+            </Link>
+            <span className="px-2" />
+            <Link
+              className="flex flex-row space-x-2 items-center hover:text-indigo-400"
+              href="https://www.vercel.com"
+              target="_blank"
+            >
+              <span>Powered by Vercel</span>
+              <span>
+                <svg
+                  aria-label="Vercel Logo"
+                  fill="currentColor"
+                  viewBox="0 0 75 65"
+                  height="15.600000000000001"
+                  width="18"
+                >
+                  <path d="M37.59.25l36.95 64H.64l36.95-64z"></path>
+                </svg>
+              </span>
+            </Link>
+            <span className="px-2" />
+            <Link
+              className="flex flex-row space-x-2 items-center hover:text-indigo-400"
+              href="https://www.alexvcasillas.com"
+              target="_blank"
+            >
+              <span>Created with ❤️ by Alex Casillas</span>
+            </Link>
           </div>
         </div>
       </div>
