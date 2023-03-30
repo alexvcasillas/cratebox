@@ -110,6 +110,11 @@ export async function GET(request: Request) {
   const folder = params.pop();
   const pkg = params.pop();
 
+  console.log("request.url: ", request.url);
+  console.log("file: ", file);
+  console.log("folder: ", folder);
+  console.log("pkg: ", pkg);
+
   if (!pkg) return new Response('Missing "pkg" query param');
   if (!file) return new Response('Missing "file" query param');
 
