@@ -108,9 +108,22 @@ export async function GET(
   request: Request,
   { params }: { params: { file: string[]; pkg: string } }
 ) {
-  const file = params.file[1];
-  const folder = params.file[0];
-  const pkg = params.pkg;
+  console.log({ params });
+  let file, folder, pkg, scopedPkg;
+
+  const isScopedPkg = params.pkg.startsWith("@");
+
+  // Scoped packages need a special treatment :)
+  if (isScopedPkg) {
+    pkg = `${params.pkg}/${params.file[0]}`;
+    scopedPkg = `@${pkg.split("@")[1]}`;
+    file = params.file.pop();
+    folder = params.file.pop();
+  } else {
+    file = params.file[1];
+    folder = params.file[0];
+    pkg = params.pkg;
+  }
 
   console.log("request.url: ", request.url);
   console.log("file: ", file);
@@ -120,10 +133,20 @@ export async function GET(
   if (!pkg) return new Response('Missing "pkg" query param');
   if (!file) return new Response('Missing "file" query param');
 
-  const [pkgName, pkgVersion] = pkg.split("@");
+  let tarballURL;
 
-  // Pattern: https://registry.npmjs.org/cratebox/-/cratebox-2.1.0.tgz
-  const tarballURL = `https://registry.npmjs.org/${pkgName}/-/${pkgName}-${pkgVersion}.tgz`;
+  if (isScopedPkg) {
+    console.log({ scopedPkg });
+    const [pkgName, pkgVersion] = (pkg.split("/").pop() as string).split("@");
+    // Pattern: https://registry.npmjs.org/cratebox/-/cratebox-2.1.0.tgz
+    tarballURL = `https://registry.npmjs.org/${scopedPkg}/-/${pkgName}-${pkgVersion}.tgz`;
+  } else {
+    const [pkgName, pkgVersion] = pkg.split("@");
+    // Pattern: https://registry.npmjs.org/cratebox/-/cratebox-2.1.0.tgz
+    tarballURL = `https://registry.npmjs.org/${pkgName}/-/${pkgName}-${pkgVersion}.tgz`;
+  }
+
+  console.log({ tarballURL });
 
   try {
     const entry = await getFileFromTarball(tarballURL, `${folder}/${file}`);
