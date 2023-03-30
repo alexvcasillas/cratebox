@@ -104,7 +104,10 @@ async function getFileFromTarball(url: string, targetFileName: string) {
   return fileBuffer;
 }
 
-export async function GET(request: Request, { params }) {
+export async function GET(
+  request: Request,
+  { params }: { params: { file: string[]; pkg: string } }
+) {
   const file = params.file[1];
   const folder = params.file[0];
   const pkg = params.pkg;
