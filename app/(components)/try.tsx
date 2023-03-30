@@ -16,9 +16,18 @@ export function Try() {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) =>
     setValue(e.currentTarget.value);
 
-  const packageName = (value || DEFAULT_PACKAGE)
-    .split("/")
-    .filter((p) => p.includes("@"));
+  let url;
+  try {
+    url = new URL(value);
+  } catch (error) {
+    url = new URL(DEFAULT_PACKAGE);
+  }
+
+  const isScopedPkg = url.pathname.startsWith("/@");
+
+  const packageName = isScopedPkg
+    ? url.pathname.split("/")[2]
+    : url.pathname.split("/").filter((p) => p.includes("@"));
 
   const fetchPackage = async () => {
     setFetchingPkg(true);
