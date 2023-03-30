@@ -1,10 +1,6 @@
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
-
 import { Inter } from "next/font/google";
 import Image from "next/image";
 import { Try } from "./(components)/try";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (
