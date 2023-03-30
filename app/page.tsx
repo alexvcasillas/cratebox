@@ -1,4 +1,3 @@
-import { Inter } from "next/font/google";
 import Image from "next/image";
 import { Try } from "./(components)/try";
 
