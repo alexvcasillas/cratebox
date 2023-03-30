@@ -144,10 +144,11 @@ export async function GET(
     if (!entry || !entry.content) return new Response("NOT FOUND");
 
     return new Response(entry.content.toString("utf8"), {
+      status: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "plain/text",
-        "Cache-Control": "max-age: 31536000, immutable",
+        "Cache-Control": "max-age: 31536000, public, immutable",
       },
     });
   } catch (error: any) {
