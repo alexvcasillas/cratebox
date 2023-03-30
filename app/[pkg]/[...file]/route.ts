@@ -111,6 +111,7 @@ export async function GET(request: Request) {
   const pkg = params.pop();
 
   console.log("request.url: ", request.url);
+
   console.log("file: ", file);
   console.log("folder: ", folder);
   console.log("pkg: ", pkg);
@@ -130,6 +131,7 @@ export async function GET(request: Request) {
 
     return new Response(entry.content.toString("utf8"), {
       headers: {
+        "Access-Control-Allow-Origin": "*",
         "Content-Type": "plain/text",
         "Cache-Control": "max-age: 31536000, immutable",
       },
