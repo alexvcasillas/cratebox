@@ -147,7 +147,7 @@ export async function GET(
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "plain/text",
-          "Cache-Control": "max-age: 31536000, public, immutable",
+          "Cache-Control": "public, max-age: 31536000, immutable",
         },
       });
 
@@ -156,7 +156,7 @@ export async function GET(
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "plain/text",
-        "Cache-Control": "max-age: 31536000, public, immutable",
+        "Cache-Control": "public, max-age: 31536000, immutable",
       },
     });
   } catch (error: any) {
@@ -166,7 +166,7 @@ export async function GET(
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "plain/text",
-        "Cache-Control": "max-age: 31536000, public, immutable",
+        "Cache-Control": "public, max-age: 31536000, immutable",
       },
     });
   }

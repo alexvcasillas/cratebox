@@ -35,7 +35,7 @@ export function Try() {
       method: "GET",
       headers: {
         "Content-Type": "plain/text",
-        "Cache-Control": "max-age: 31536000, public, immutable",
+        "Cache-Control": "public, max-age: 31536000, immutable",
       },
     });
     const res = await req.text();
