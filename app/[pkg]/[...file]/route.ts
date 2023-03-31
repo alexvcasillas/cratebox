@@ -153,9 +153,11 @@ export async function GET(
 
     return new Response(entry.content.toString("utf8"), {
       status: 200,
+      // @ts-ignore: Content-Length is a valid header
       headers: {
+        "Content-Length": Buffer.byteLength(entry.content),
         "Access-Control-Allow-Origin": "*",
-        "Content-Type": "plain/text",
+        "Content-Type": "plain/text; charset=utf-8",
         "Cache-Control": "public, max-age: 31536000, immutable",
       },
     });
