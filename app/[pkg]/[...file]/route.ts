@@ -108,7 +108,10 @@ export async function GET(
   _: Request,
   { params }: { params: { file: string[]; pkg: string } }
 ) {
-  let file, folder, pkg, scopedPkg, filePath;
+  let file = params.file,
+    pkg,
+    scopedPkg,
+    filePath;
 
   const isScopedPkg = params.pkg.startsWith("@");
 
@@ -116,25 +119,12 @@ export async function GET(
   if (isScopedPkg) {
     pkg = `${params.pkg}/${params.file[0]}`;
     scopedPkg = `@${pkg.split("@")[1]}`;
-    file = params.file.pop();
-    folder = params.file.pop();
   } else {
-    file = params.file[1];
-    folder = params.file[0];
     pkg = params.pkg;
   }
 
-  // Define composed file path between folder and file
-  filePath = `${folder}/${file}`;
-
-  // This is needed as some packages export something at the root instead
-  // like: https://cratebox.io/open-props@1.5.7/colors-hsl.min.css
-  // where colors-hsl.min.css is the "file[0]" which we map to folder
-  if (!file && folder) {
-    file = folder;
-    // Recompose file path only from file
-    filePath = file;
-  }
+  // Define composed file path
+  filePath = params.file.join("/");
 
   if (!pkg) return new Response('Missing "pkg" query param');
   if (!file) return new Response('Missing "file" query param');
