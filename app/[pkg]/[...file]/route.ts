@@ -108,7 +108,7 @@ export async function GET(
   _: Request,
   { params }: { params: { file: string[]; pkg: string } }
 ) {
-  let file, folder, pkg, scopedPkg;
+  let file, folder, pkg, scopedPkg, filePath;
 
   const isScopedPkg = params.pkg.startsWith("@");
 
@@ -122,6 +122,18 @@ export async function GET(
     file = params.file[1];
     folder = params.file[0];
     pkg = params.pkg;
+  }
+
+  // Define composed file path between folder and file
+  filePath = `${folder}/${file}`;
+
+  // This is needed as some packages export something at the root instead
+  // like: https://cratebox.io/open-props@1.5.7/colors-hsl.min.css
+  // where colors-hsl.min.css is the "file[0]" which we map to folder
+  if (!file && folder) {
+    file = folder;
+    // Recompose file path only from file
+    filePath = file;
   }
 
   if (!pkg) return new Response('Missing "pkg" query param');
@@ -139,14 +151,14 @@ export async function GET(
   }
 
   try {
-    const entry = await getFileFromTarball(tarballURL, `${folder}/${file}`);
+    const entry = await getFileFromTarball(tarballURL, filePath);
 
     if (!entry || !entry.content)
       return new Response("NOT FOUND", {
         status: 404,
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Content-Type": "plain/text",
+          "Content-Type": "plain/text; charset=utf-8",
           "Cache-Control": "public, max-age: 31536000, immutable",
         },
       });
@@ -167,7 +179,7 @@ export async function GET(
       status: 500,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Content-Type": "plain/text",
+        "Content-Type": "plain/text; charset=utf-8",
         "Cache-Control": "public, max-age: 31536000, immutable",
       },
     });
