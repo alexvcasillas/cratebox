@@ -3,6 +3,7 @@ import { Buffer } from "node:buffer";
 import tar from "tar-stream";
 import internal, { Readable } from "node:stream";
 import gunzip from "gunzip-maybe";
+import { getMimeType } from "@/utils/get-mime-type";
 
 export const dynamic = "auto";
 export const dynamicParams = true;
@@ -140,6 +141,8 @@ export async function GET(
     tarballURL = `https://registry.npmjs.org/${pkgName}/-/${pkgName}-${pkgVersion}.tgz`;
   }
 
+  const mimeType = getMimeType(filePath);
+
   try {
     const entry = await getFileFromTarball(tarballURL, filePath);
 
@@ -148,7 +151,7 @@ export async function GET(
         status: 404,
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Content-Type": "plain/text; charset=utf-8",
+          "Content-Type": `text/plain; charset=utf-8`,
           "Cache-Control": "public, max-age: 31536000, immutable",
         },
       });
@@ -159,7 +162,7 @@ export async function GET(
       headers: {
         "Content-Length": Buffer.byteLength(entry.content),
         "Access-Control-Allow-Origin": "*",
-        "Content-Type": "plain/text; charset=utf-8",
+        "Content-Type": `${mimeType}`,
         "Cache-Control": "public, max-age: 31536000, immutable",
       },
     });
@@ -169,7 +172,7 @@ export async function GET(
       status: 500,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Content-Type": "plain/text; charset=utf-8",
+        "Content-Type": `text/plain; charset=utf-8`,
         "Cache-Control": "public, max-age: 31536000, immutable",
       },
     });
