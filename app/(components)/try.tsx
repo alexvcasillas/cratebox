@@ -5,7 +5,7 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import { ChangeEvent, Fragment, useState } from "react";
 
 const DEFAULT_PACKAGE =
-  "http://localhost:3000/react@18.2.0/umd/react.production.min.js";
+  "https://cratebox.io/react@18.2.0/umd/react.production.min.js";
 
 export function Try() {
   const [open, setOpen] = useState(false);
