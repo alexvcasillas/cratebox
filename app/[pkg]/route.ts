@@ -1,10 +1,15 @@
-export async function GET(_: Request) {
-  return new Response("BAD REQUEST: missing [:file] in the URI", {
-    status: 400,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "plain/text; charset=utf-8",
-      "Cache-Control": "public, max-age: 31536000, immutable",
-    },
-  });
+import { readMainFile } from "@/services/read-main-file";
+
+export const dynamic = "auto";
+export const dynamicParams = true;
+export const revalidate = false;
+export const fetchCache = "force-cache";
+export const runtime = "nodejs";
+export const preferredRegion = "edge";
+
+export async function GET(
+  _: Request,
+  { params }: { params: { file: string[]; pkg: string } }
+) {
+  return await readMainFile({ searchPkg: params.pkg, searchFile: params.file });
 }

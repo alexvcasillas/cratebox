@@ -6,7 +6,7 @@ export const metadata = {
     "Cratebox is a fast, global content delivery network for everything on npm. Use it to quickly and easily load any file from any package using a URL",
 };
 
-import "./globals.css";
+import "../styles/globals.css";
 
 export default function RootLayout({
   children,
