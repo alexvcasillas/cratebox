@@ -39,7 +39,21 @@ export async function readMainFile({
 
   const pkgContent = JSON.parse(packageData);
 
+  // console.log({ pkgContent });
+
+  console.log("latest: ", pkgContent.versions[pkgContent["dist-tags"].latest]);
+
   const main = pkgContent.versions[pkgContent["dist-tags"].latest].main;
+  const unpkg = pkgContent.versions[pkgContent["dist-tags"].latest].unpkg;
+  const cratebox = pkgContent.versions[pkgContent["dist-tags"].latest].cratebox;
+
+  if (cratebox) {
+    return redirect(`/${pkg}@${pkgContent["dist-tags"].latest}/${cratebox}`);
+  }
+
+  if (unpkg) {
+    return redirect(`/${pkg}@${pkgContent["dist-tags"].latest}/${unpkg}`);
+  }
 
   return redirect(`/${pkg}@${pkgContent["dist-tags"].latest}/${main}`);
 }
